@@ -55,6 +55,21 @@ export const useDynamicSEO = (config: BirthdayConfig) => {
     const isBn = activeLanguage === 'bn' || activeLanguage === 'bengali' || isBengali;
     const isHi = activeLanguage === 'hi' || activeLanguage === 'hindi' || isHindi;
 
+    // Vietnamese (20/10) edition: keep the static Vietnamese title/description from index.html
+    if (language === 'vi') {
+      const viTitle = 'Chúc mừng 20/10 💐 | Quà từ các bạn nam 12A5';
+      const viDescription = 'Món quà 20/10 từ các bạn nam lớp 12A5 gửi đến các bạn nữ: lời xin lỗi vì gửi trễ, lời cảm ơn và lời chúc một năm cuối cấp thật trọn vẹn.';
+      document.title = viTitle;
+      setMetaTag('meta[name="description"]', 'name', 'description', viDescription);
+      setMetaTag('meta[property="og:title"]', 'property', 'og:title', viTitle);
+      setMetaTag('meta[property="og:description"]', 'property', 'og:description', viDescription);
+      setMetaTag('meta[property="og:locale"]', 'property', 'og:locale', 'vi_VN');
+      setMetaTag('meta[name="twitter:title"]', 'name', 'twitter:title', viTitle);
+      setMetaTag('meta[name="twitter:description"]', 'name', 'twitter:description', viDescription);
+      document.documentElement.lang = 'vi';
+      return;
+    }
+
     // 1. Dynamic Title
     let title: string;
     if (rawName) {

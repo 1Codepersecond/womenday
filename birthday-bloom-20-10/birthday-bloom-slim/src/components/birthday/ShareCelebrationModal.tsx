@@ -294,6 +294,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
                     <option value="bn">বাংলা (Bengali)</option>
                     <option value="hi">हिन्दी (Hindi)</option>
                     <option value="fr">Français (French)</option>
+                    <option value="vi">Tiếng Việt (Vietnamese)</option>
                   </select>
                 </div>
               </div>

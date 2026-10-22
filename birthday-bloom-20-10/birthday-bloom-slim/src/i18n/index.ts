@@ -4,18 +4,23 @@ import { enTranslations } from "./locales/en";
 import { hiTranslations } from "./locales/hi";
 import { bnTranslations } from "./locales/bn";
 import { fr as frTranslations } from "./locales/fr";
+import { viTranslations } from "./locales/vi";
 
-export type SupportedLanguage = 'en' | 'hi' | 'bn' | 'fr';
+export type SupportedLanguage = 'en' | 'hi' | 'bn' | 'fr' | 'vi';
 
 export const translations: Record<SupportedLanguage, TranslationSchema> = {
     en: enTranslations,
     hi: hiTranslations,
     bn: bnTranslations,
     fr: frTranslations,
+    vi: viTranslations,
 };
 
 export const getTranslation = (lang?: string): TranslationSchema => {
     const normalized = (lang || '').toLowerCase().trim();
+    if (normalized === 'vi' || normalized === 'vietnamese' || normalized === 'tiengviet' || normalized === 'tiếng việt') {
+        return viTranslations;
+    }
     if (normalized === 'fr' || normalized === 'french' || normalized === 'francais' || normalized === 'française' || normalized === 'francaise') {
         return frTranslations;
     }
@@ -64,7 +69,9 @@ export const useTranslation = () => {
     const rawLanguage = useBirthdayStore(state => state.config.language);
     const normalized = (rawLanguage || '').toLowerCase().trim();
     const language: SupportedLanguage =
-        normalized === 'fr' || normalized === 'french' || normalized === 'francais' || normalized === 'française' || normalized === 'francaise'
+        normalized === 'vi' || normalized === 'vietnamese' || normalized === 'tiengviet' || normalized === 'tiếng việt'
+            ? 'vi'
+            : normalized === 'fr' || normalized === 'french' || normalized === 'francais' || normalized === 'française' || normalized === 'francaise'
             ? 'fr'
             : normalized === 'bn' || normalized === 'bengali' || normalized === 'bangla'
                 ? 'bn'
@@ -83,6 +90,7 @@ export const useTranslation = () => {
         isHindi: language === 'hi',
         isBengali: language === 'bn',
         isFrench: language === 'fr',
+        isVietnamese: language === 'vi',
         translations: currentTranslations,
     };
 };

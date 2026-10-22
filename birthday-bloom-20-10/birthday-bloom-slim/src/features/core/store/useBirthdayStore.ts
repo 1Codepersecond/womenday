@@ -44,7 +44,7 @@ export interface BirthdayConfig {
     reducedMotion?: boolean;
     showSkipButton?: boolean;
     soundEffectsEnabled?: boolean;
-    language?: 'en' | 'hi' | 'bn' | 'fr' | string;
+    language?: 'en' | 'hi' | 'bn' | 'fr' | 'vi' | string;
     password?: string;
     passwordHint?: string;
     passwordFormat?: string;
@@ -54,7 +54,7 @@ interface BirthdayStore {
     config: BirthdayConfig;
     getAnimationPacing: () => 'slow' | 'fast' | 'moderate';
     getMood: () => 'romantic' | 'energetic' | 'warm';
-    getLanguage: () => 'en' | 'hi' | 'bn' | 'fr' | string;
+    getLanguage: () => 'en' | 'hi' | 'bn' | 'fr' | 'vi' | string;
 }
 const parseEnvString = (...values: unknown[]): string => {
     for (const value of values) {
@@ -195,8 +195,10 @@ const envSoundEffects = import.meta.env.VITE_SOUND_EFFECTS !== undefined
     ? parseEnvBoolean(import.meta.env.VITE_SOUND_EFFECTS, true)
     : true;
 const rawLanguage = parseEnvString(import.meta.env.VITE_LANGUAGE, import.meta.env.VITE_LANG).toLowerCase();
-const envLanguage: 'en' | 'hi' | 'bn' | 'fr' =
-    rawLanguage === 'hi' || rawLanguage === 'hindi' || rawLanguage === 'in'
+const envLanguage: 'en' | 'hi' | 'bn' | 'fr' | 'vi' =
+    rawLanguage === 'vi' || rawLanguage === 'vietnamese' || rawLanguage === 'tiengviet'
+        ? 'vi'
+        : rawLanguage === 'hi' || rawLanguage === 'hindi' || rawLanguage === 'in'
         ? 'hi'
         : rawLanguage === 'bn' || rawLanguage === 'bengali' || rawLanguage === 'bangla'
             ? 'bn'
