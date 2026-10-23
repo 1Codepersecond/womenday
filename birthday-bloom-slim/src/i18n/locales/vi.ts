@@ -111,7 +111,7 @@ export const viTranslations: TranslationSchema = {
         prepareEpic: "Chuẩn bị tinh thần cho một điều bất ngờ nhé... 🚀",
         specialSurpriseMsg: "Tụi mình có một món quà nhỏ dành cho các bạn...",
         deservesMoreThanWords: "Vì các bạn xứng đáng nhận nhiều hơn một lời chúc...",
-        highLegendLevel: "Cảnh báo: Phát hiện nhiều bạn nữ tuyệt vời ở lớp 12A5! ⚠️",
+        highLegendLevel: "Cảnh báo: Phát hiện nhiều bạn nữ vẫn chưa được tổ chức 20/10 ở lớp 12A5! ⚠️",
         moreMagicalSurprise: "Và các bạn xứng đáng có một bất ngờ đẹp hơn thế...",
     },
 };
