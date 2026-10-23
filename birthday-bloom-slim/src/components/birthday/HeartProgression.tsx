@@ -63,8 +63,10 @@ const FourCornerMerge = ({ onDone }: {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const rafRef = useRef<number>(0);
     const { name } = useBirthdayStore(state => state.config);
-    const { isHindi, isBengali, isFrench } = useTranslation();
-    const loveMessage = isFrench
+    const { isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
+    const loveMessage = isVietnamese
+        ? `Thương các bạn nhiều ${name || 'lắm'}`
+        : isFrench
         ? `On t'aime tellement ${name || 'trésor'}`
         : isBengali
             ? `আপনাকে অনেক ভালোবাসি ${name || 'প্রিয়'}`

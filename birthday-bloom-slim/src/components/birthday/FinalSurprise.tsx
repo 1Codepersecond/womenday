@@ -12,7 +12,7 @@ import { isRealImageUrl, isValidVideoUrl } from "@/utils/mediaUtils";
 
 export const FinalSurprise = () => {
     const { config } = useBirthdayStore();
-    const { isHindi, isBengali, isFrench, language } = useTranslation();
+    const { isHindi, isBengali, isFrench, isVietnamese, language } = useTranslation();
     const isMobile = useIsMobile();
     const allMemories = config.specialMemories || [];
     const memories = allMemories.filter(m => m.text && (isRealImageUrl(m.image) || !m.image));
@@ -28,31 +28,31 @@ export const FinalSurprise = () => {
     const bigWishes = useMemo(
         () =>
             getBigWishes(
-                config.name || (isFrench ? "Toi" : isBengali ? "প্রিয়" : isHindi ? "प्रिय" : "You"),
+                config.name || (isVietnamese ? "Các bạn" : isFrench ? "Toi" : isBengali ? "প্রিয়" : isHindi ? "प्रिय" : "You"),
                 config.relationship || "partner",
                 config.gender || "female",
                 config.interests || [],
                 language
             ),
-        [config.name, config.relationship, config.gender, config.interests, language, isFrench, isBengali, isHindi]
+        [config.name, config.relationship, config.gender, config.interests, language, isFrench, isVietnamese, isBengali, isHindi, isVietnamese]
     );
     const emojiKit = useMemo(() => getTemplateEmojiKit(config), [config]);
 
-    return (<section className="relative z-20 py-32 px-4 overflow-hidden" aria-label="Final Surprise and Memories">
+    return (<section className="relative z-20 py-32 px-4 overflow-hidden" aria-label={isVietnamese ? "Bất ngờ cuối cùng và kỷ niệm" : "Final Surprise and Memories"}>
       <div className="max-w-6xl mx-auto">
         {hasRealMemories && (<>
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
             <h2 className="font-display text-5xl md:text-8xl font-black mb-6 bg-gradient-to-r from-primary via-white to-accent bg-clip-text text-transparent">
-              {isFrench ? "Nos Souvenirs Spéciaux 🏞️" : isBengali ? "আমাদের বিশেষ স্মৃতিগুলো 🏞️" : isHindi ? "हमारी खास यादें 🏞️" : "Our Special Memories 🏞️"}
+              {isVietnamese ? "Những kỷ niệm đáng nhớ 🏞️" : isFrench ? "Nos Souvenirs Spéciaux 🏞️" : isBengali ? "আমাদের বিশেষ স্মৃতিগুলো 🏞️" : isHindi ? "हमारी खास यादें 🏞️" : "Our Special Memories 🏞️"}
             </h2>
             <p className="text-xl md:text-2xl text-foreground/60 max-w-2xl mx-auto italic">
-              {isFrench ? "« Un voyage de mille lieues commence par un premier pas, mais ce sont les moments partagés qui lui donnent tout son sens. »" : isBengali ? "“হাজার মাইলের যাত্রা একটি পদক্ষেপ দিয়ে শুরু হয়, কিন্তু সুন্দর স্মৃতিগুলোই এই যাত্রাকে সার্থক করে তোলে।”" : isHindi ? "“हजारों मीलों का सफर एक कदम से शुरू होता है, लेकिन वे खूबसूरत लम्हें ही हैं जो इस सफर को यादगार बनाते हैं।”" : "\"A journey of a thousand miles begins with a single step, but it's the moments we share that make it worth traveling.\""}
+              {isVietnamese ? "“Chặng đường nào cũng bắt đầu từ một bước chân, nhưng chính những khoảnh khắc bên nhau mới làm nó thật ý nghĩa.”" : isFrench ? "« Un voyage de mille lieues commence par un premier pas, mais ce sont les moments partagés qui lui donnent tout son sens. »" : isBengali ? "“হাজার মাইলের যাত্রা একটি পদক্ষেপ দিয়ে শুরু হয়, কিন্তু সুন্দর স্মৃতিগুলোই এই যাত্রাকে সার্থক করে তোলে।”" : isHindi ? "“हजारों मीलों का सफर एक कदम से शुरू होता है, लेकिन वे खूबसूरत लम्हें ही हैं जो इस सफर को यादगार बनाते हैं।”" : "\"A journey of a thousand miles begins with a single step, but it's the moments we share that make it worth traveling.\""}
             </p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-32">
             {memories.map((memory, i) => (<motion.div key={i} initial={{ opacity: 0, y: 50, rotate: i % 2 === 0 ? -2 : 2 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.2 }} whileHover={{ scale: 1.05, y: -10, rotate: i % 2 === 0 ? 2 : -2 }} className="group relative aspect-[4/5] bg-white/5 border border-white/10 p-4 rounded-3xl backdrop-blur-xl overflow-hidden shadow-2xl">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"/>
-                {memory.image ? (<img src={memory.image} alt={memory.text || `Special celebration memory ${i + 1}`} className="w-full h-full object-cover rounded-2xl grayscale group-hover:grayscale-0 transition-all duration-700"/>) : (<div className="w-full h-full flex items-center justify-center bg-white/5 rounded-2xl">
+                {memory.image ? (<img src={memory.image} alt={memory.text || (isVietnamese ? `Kỷ niệm đáng nhớ ${i + 1}` : `Special celebration memory ${i + 1}`)} className="w-full h-full object-cover rounded-2xl grayscale group-hover:grayscale-0 transition-all duration-700"/>) : (<div className="w-full h-full flex items-center justify-center bg-white/5 rounded-2xl">
                     <Camera size={48} className="text-white/10"/>
                   </div>)}
                 <div className="absolute bottom-8 left-8 right-8">
@@ -66,11 +66,11 @@ export const FinalSurprise = () => {
 
         {hasValidVideo && (<motion.div initial={{ opacity: 0, scale: isMobile ? 1 : 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className={isMobile ? "relative max-w-4xl mx-auto rounded-[2rem] overflow-hidden border border-white/20 shadow-[0_0_80px_-20px_var(--color-primary)] bg-black/70 backdrop-blur-xl" : "relative max-w-4xl mx-auto rounded-[3rem] overflow-hidden border border-white/20 shadow-[0_0_100px_-20px_var(--color-primary)] bg-black/40 backdrop-blur-3xl"}>
             <div className="aspect-video w-full">
-              <iframe src={finalVideoSrc} loading="lazy" className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title="Final Surprise Video"/>
+              <iframe src={finalVideoSrc} loading="lazy" className="w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title={isVietnamese ? "Video bất ngờ cuối cùng" : "Final Surprise Video"}/>
             </div>
             <div className="p-10 text-center bg-gradient-to-t from-black/80 to-transparent">
-              <h3 className="font-display text-2xl md:text-4xl font-black mb-4">{isFrench ? "L'Ultime Surprise 🎬" : isBengali ? "শেষ সারপ্রাইজ 🎬" : isHindi ? "आखरी सरप्राइज 🎬" : "The Final Surprise 🎬"}</h3>
-              <p className="text-lg md:text-xl text-white/60 font-light">{isFrench ? "Une petite touche spéciale pour illuminer votre cœur et faire sourire votre âme." : isBengali ? "আপনার মুখে একটি মিষ্টি হাসি ফুটিয়ে তোলার জন্য একটি ছোট্ট উপহার।" : isHindi ? "आपके चेहरे पर एक प्यारी सी मुस्कान लाने के लिए एक छोटा सा तोहफा।" : "A little something extra to make your heart smile."}</p>
+              <h3 className="font-display text-2xl md:text-4xl font-black mb-4">{isVietnamese ? "Bất ngờ cuối cùng 🎬" : isFrench ? "L'Ultime Surprise 🎬" : isBengali ? "শেষ সারপ্রাইজ 🎬" : isHindi ? "आखरी सरप्राइज 🎬" : "The Final Surprise 🎬"}</h3>
+              <p className="text-lg md:text-xl text-white/60 font-light">{isVietnamese ? "Một chút điều đặc biệt để làm ấm lòng và mang đến nụ cười cho các bạn." : isFrench ? "Une petite touche spéciale pour illuminer votre cœur et faire sourire votre âme." : isBengali ? "আপনার মুখে একটি মিষ্টি হাসি ফুটিয়ে তোলার জন্য একটি ছোট্ট উপহার।" : isHindi ? "आपके चेहरे पर एक प्यारी सी मुस्कान लाने के लिए एक छोटा सा तोहफा।" : "A little something extra to make your heart smile."}</p>
             </div>
           </motion.div>)}
 
@@ -115,12 +115,12 @@ export const FinalSurprise = () => {
           </motion.div>
           <div className="space-y-6">
             <h2 className="font-display text-4xl md:text-7xl font-black tracking-tight leading-tight">
-              {isFrench ? "J'espère que cette journée a été " : isBengali ? "আশা করি এটি আপনার দিনটিকে " : isHindi ? "उम्मीद है यह आपके दिन को " : "I Hope This Made Your "} <br />
-              <span style={{ color: primaryColor }} className="animate-pulse">{isFrench ? "aussi spéciale et merveilleuse que vous l'êtes" : isBengali ? "আপনার মতোই সুন্দর ও বিশেষ করে তুলবে" : isHindi ? "उतना ही खास बनाएगा जितने आप हैं" : "Day As Special As You Are"}</span>
+              {isVietnamese ? "Hy vọng ngày hôm nay sẽ " : isFrench ? "J'espère que cette journée a été " : isBengali ? "আশা করি এটি আপনার দিনটিকে " : isHindi ? "उम्मीद है यह आपके दिन को " : "I Hope This Made Your "} <br />
+              <span style={{ color: primaryColor }} className="animate-pulse">{isVietnamese ? "thật đặc biệt và tuyệt vời như chính các bạn" : isFrench ? "aussi spéciale et merveilleuse que vous l'êtes" : isBengali ? "আপনার মতোই সুন্দর ও বিশেষ করে তুলবে" : isHindi ? "उतना ही खास बनाएगा जितने आप हैं" : "Day As Special As You Are"}</span>
             </h2>
             <p className="text-xl md:text-3xl font-light text-foreground/60 max-w-3xl mx-auto leading-relaxed">
-              {isFrench ? "Chaque pixel, chaque animation et chaque mot a été conçu avec tout notre amour." : isBengali ? "প্রতিটি পিক্সেল, প্রতিটি অ্যানিমেশন এবং প্রতিটি শব্দ শুধু নিখাদ ভালোবাসা দিয়ে তৈরি।" : isHindi ? "हर एक पिक्सेल, हर एनिमेशन और हर शब्द सिर्फ और सिर्फ प्यार से सजाया गया है।" : "Every pixel, every animation, and every word was crafted with love."} <br />
-              {isFrench ? `Encore une fois, très Joyeux Anniversaire, ${config.name}. ✨` : isBengali ? `আরও একবার জন্মদিনের অফুরন্ত শুভেচ্ছা, ${config.name}। ✨` : isHindi ? `एक बार फिर जन्मदिन की ढेर सारी शुभकामनाएं, ${config.name}। ✨` : `Happy Birthday once again, ${config.name}. ✨`}
+              {isVietnamese ? "Từng chi tiết, từng hiệu ứng và từng lời chúc đều được gửi bằng tất cả sự chân thành." : isFrench ? "Chaque pixel, chaque animation et chaque mot a été conçu avec tout notre amour." : isBengali ? "প্রতিটি পিক্সেল, প্রতিটি অ্যানিমেশন এবং প্রতিটি শব্দ শুধু নিখাদ ভালোবাসা দিয়ে তৈরি।" : isHindi ? "हर एक पिक्सेल, हर एनिमेशन और हर शब्द सिर्फ और सिर्फ प्यार से सजाया गया है।" : "Every pixel, every animation, and every word was crafted with love."} <br />
+              {isVietnamese ? `Một lần nữa, chúc mừng ngày 20/10 đến ${config.name || "các bạn nữ 12A5"}. ✨` : isFrench ? `Encore une fois, très Joyeux Anniversaire, ${config.name}. ✨` : isBengali ? `আরও একবার জন্মদিনের অফুরন্ত শুভেচ্ছা, ${config.name}। ✨` : isHindi ? `एक बार फिर जन्मदिन की ढेर सारी शुभकामनाएं, ${config.name}। ✨` : `Happy Birthday once again, ${config.name}. ✨`}
             </p>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-3 text-xl">

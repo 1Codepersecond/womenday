@@ -15,6 +15,7 @@ import { SPECIAL_QUOTES } from "@/config/templates";
 import { HINDI_SPECIAL_QUOTES } from "@/config/hindiTemplates";
 import { BENGALI_SPECIAL_QUOTES } from "@/config/bengaliTemplates";
 import { FRENCH_SPECIAL_QUOTES } from "@/config/frenchTemplates";
+import { VIETNAMESE_SPECIAL_QUOTES } from "@/config/vietnameseTemplates";
 
 const LazyCake3D = lazy(() => import("./Cake3D").then((m) => ({ default: m.Cake3D })));
 
@@ -23,8 +24,8 @@ const CakeCard = ({ cake, onSelect }: {
     onSelect: () => void;
 }) => {
     const isMobile = useIsMobile();
-    const { t, isHindi, isBengali, isFrench } = useTranslation();
-    const displayName = getCakeName(cake, isHindi, isBengali, isFrench);
+    const { t, isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
+    const displayName = getCakeName(cake, isHindi, isBengali, isFrench, isVietnamese);
     return (
         <motion.button 
             whileHover={!isMobile ? { scale: 1.05, y: -10, rotateZ: 2 } : undefined} 
@@ -80,14 +81,16 @@ export const CakeCutting = () => {
     const { fireCinematicCelebration } = useConfetti();
     const { playBoom, playReveal, playPop, playWhoosh } = useSoundManager();
     const { name, age, relationship, gender, favoriteColor } = useBirthdayStore(state => state.config);
-    const { t, isHindi, isBengali, isFrench } = useTranslation();
+    const { t, isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
     const primaryColor = favoriteColor || '#FF6B6B';
 
     const quotes = useMemo(() => {
         const isMale = gender === 'male';
         const isFemale = gender === 'female';
         const relKey = (relationship || 'partner').toLowerCase();
-        const templateQuotePool = isFrench
+        const templateQuotePool = isVietnamese
+            ? (VIETNAMESE_SPECIAL_QUOTES[relKey] || VIETNAMESE_SPECIAL_QUOTES.friend)
+            : isFrench
             ? (FRENCH_SPECIAL_QUOTES[relKey] || FRENCH_SPECIAL_QUOTES.friend)
             : isBengali
                 ? (BENGALI_SPECIAL_QUOTES[relKey] || BENGALI_SPECIAL_QUOTES.friend)
@@ -95,6 +98,32 @@ export const CakeCutting = () => {
                     ? (HINDI_SPECIAL_QUOTES[relKey] || HINDI_SPECIAL_QUOTES.friend)
                     : (SPECIAL_QUOTES[relKey] || SPECIAL_QUOTES.friend);
         const signatureTemplateQuote = templateQuotePool?.[0];
+
+        if (isVietnamese) {
+            if (relationship === 'partner') return [
+                { text: `Gửi ${isMale ? 'chàng hoàng tử' : isFemale ? 'nàng công chúa' : 'người thương'} của mình...`, animation: "zoom-in" as const },
+                { text: signatureTemplateQuote || "Hãy ước một điều cho tương lai của chúng ta...", animation: "float" as const },
+                { text: "Mình yêu bạn đến tận các vì sao và xa hơn nữa", animation: "pop-out" as const },
+                { text: t('cake.happyBirthdayLove'), animation: "typewriter-burst" as const },
+                { text: t('cake.foreverYours'), animation: "pop-out" as const },
+            ];
+
+            if (relationship === 'friend') return [
+                { text: `Gửi ${name || 'các bạn nữ'} thân yêu!`, animation: "pop-out" as const },
+                { text: signatureTemplateQuote || t('cake.readyGetOlder'), animation: "zoom-in" as const },
+                { text: t('cake.zeroHangovers'), animation: "stagger-up" as const },
+                { text: t('cake.happyBirthdayBestie'), animation: "typewriter-burst" as const },
+                { text: t('cake.makeSomeNoise'), animation: "float" as const },
+            ];
+
+            return [
+                { text: `Dành cho ${isMale ? 'chàng hoàng tử' : isFemale ? 'nàng công chúa' : 'người đặc biệt'} của chúng mình...`, animation: "zoom-in" as const },
+                { text: signatureTemplateQuote || t('cake.cherishEveryDay'), animation: "pop-out" as const },
+                { text: t('cake.maySmilesBrighten'), animation: "stagger-up" as const },
+                { text: t('cake.happyBirthdayLove'), animation: "typewriter-burst" as const },
+                { text: t('cake.celebrateYou'), animation: "float" as const },
+            ];
+        }
 
         if (isFrench) {
             if (relationship === 'partner') return [
@@ -197,7 +226,7 @@ export const CakeCutting = () => {
             { text: "Happy Birthday!", animation: "typewriter-burst" as const },
             { text: `Stay blessed always ✨`, animation: "float" as const },
         ];
-    }, [name, relationship, gender, isHindi, isBengali, isFrench, t]);
+    }, [name, relationship, gender, isHindi, isBengali, isFrench, isVietnamese, t]);
 
     const handleSelectCake = useCallback((cake: CakeOption) => {
         if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(30);
@@ -339,7 +368,7 @@ export const CakeCutting = () => {
                         >
                             <button
                                 type="button"
-                                aria-label={isFrench ? "Fermer l'expérience du gâteau" : isBengali ? "কেকের অভিজ্ঞতা বন্ধ করুন" : isHindi ? "केक का अनुभव बंद करें" : "Close cake experience"}
+                                aria-label={isVietnamese ? "Đóng phần thổi nến và cắt bánh" : isFrench ? "Fermer l'expérience du gâteau" : isBengali ? "কেকের অভিজ্ঞতা বন্ধ করুন" : isHindi ? "केक का अनुभव बंद करें" : "Close cake experience"}
                                 onClick={() => setPhase("select")}
                                 className="fixed top-6 right-6 z-[110] w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white flex items-center justify-center text-xl transition-all shadow-xl backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-primary"
                             >
@@ -369,7 +398,7 @@ export const CakeCutting = () => {
                                             </div>
                                             <div className="flex flex-col items-center gap-2">
                                                 <h2 className="text-3xl md:text-4xl font-display font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-primary to-white uppercase">
-                                                    {isFrench ? "Préparation de votre gâteau..." : isBengali ? "আপনার কেক তৈরি হচ্ছে..." : isHindi ? "आपका केक तैयार हो रहा है..." : "Baking Your Cake..."}
+                                                    {isVietnamese ? "Đang chuẩn bị bánh cho các bạn..." : isFrench ? "Préparation de votre gâteau..." : isBengali ? "আপনার কেক তৈরি হচ্ছে..." : isHindi ? "आपका केक तैयार हो रहा है..." : "Baking Your Cake..."}
                                                 </h2>
                                                 <div className="flex gap-1 mt-2">
                                                     {[1, 2, 3].map((i) => (
@@ -396,7 +425,7 @@ export const CakeCutting = () => {
                                     }}
                                 >
                                     <span>{cake.emoji}</span>
-                                    <span>{getCakeName(cake, isHindi, isBengali, isFrench)}</span>
+                                    <span>{getCakeName(cake, isHindi, isBengali, isFrench, isVietnamese)}</span>
                                     {name && (
                                         <>
                                             <span className="text-white/30">•</span>
@@ -521,13 +550,13 @@ export const CakeCutting = () => {
                                                 }}
                                             >
                                                 <span className="relative z-10 flex items-center gap-2">
-                                                    <span>{isFrench ? "Couper le Gâteau ✨" : isBengali ? "কেক কাটুন ✨" : isHindi ? "केक काटिए ✨" : "Cut The Cake ✨"}</span>
+                                                    <span>{isVietnamese ? "Cắt bánh ✨" : isFrench ? "Couper le Gâteau ✨" : isBengali ? "কেক কাটুন ✨" : isHindi ? "केक काटिए ✨" : "Cut The Cake ✨"}</span>
                                                     <span>🎂</span>
                                                 </span>
                                                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-400" />
                                             </motion.button>
                                             <p className="text-white/60 text-xs sm:text-sm tracking-widest uppercase font-medium animate-pulse">
-                                                {isFrench ? "Touchez pour trancher le gâteau" : isBengali ? "কেকটি কাটতে স্পর্শ করুন" : isHindi ? "केक काटने के लिए टैप करें" : "Tap to slice the cake"}
+                                                {isVietnamese ? "Chạm để cắt bánh" : isFrench ? "Touchez pour trancher le gâteau" : isBengali ? "কেকটি কাটতে স্পর্শ করুন" : isHindi ? "केक काटने के लिए टैप करें" : "Tap to slice the cake"}
                                             </p>
                                         </motion.div>
                                     )}
@@ -560,7 +589,7 @@ export const CakeCutting = () => {
                                         onClick={() => setPhase("select")} 
                                         className="mt-16 px-10 py-4 rounded-full text-sm font-black uppercase tracking-[0.3em] text-white/40 hover:text-white border border-white/10 hover:bg-white/5 transition-all duration-500"
                                     >
-                                        {isFrench ? "✕ Terminer l'expérience" : isBengali ? "✕ অভিজ্ঞতা সমাপ্ত করুন" : isHindi ? "✕ अनुभव समाप्त करें" : "✕ Finish Experience"}
+                                        {isVietnamese ? "✕ Kết thúc" : isFrench ? "✕ Terminer l'expérience" : isBengali ? "✕ অভিজ্ঞতা সমাপ্ত করুন" : isHindi ? "✕ अनुभव समाप्त करें" : "✕ Finish Experience"}
                                     </motion.button>
                                 )}
                             </div>

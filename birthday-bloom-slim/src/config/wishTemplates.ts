@@ -213,7 +213,27 @@ function shuffleArray<T>(array: T[]): T[] {
   return newArray;
 }
 
-export function getWishDeck(relationship: RelationshipType, name: string): WishTemplate[] {
+/**
+ * Bộ thẻ lời chúc tiếng Việt cho 20/10 — các bạn nam 12A5 gửi các bạn nữ.
+ * Dùng chung cho mọi kiểu quan hệ vì nội dung tập trung vào lớp 12A5.
+ */
+export const VIETNAMESE_WISH_TEMPLATES: WishTemplate[] = [
+  { id: 'vi1', tone: 'sincere', relationship: 'friend', text: 'Chúc {name} luôn xinh đẹp, vui vẻ và thật nhiều niềm tin trong năm cuối cấp!', icon: '🌸' },
+  { id: 'vi2', tone: 'sincere', relationship: 'friend', text: 'Chúc {name} đạt nguyện vọng 1 như mong muốn. Tụi mình tin các bạn làm được!', icon: '🎯' },
+  { id: 'vi3', tone: 'sincere', relationship: 'friend', text: 'Cảm ơn {name} đã luôn đồng hành cùng lớp mình. Có các bạn, 12A5 thêm nhiều màu sắc.', icon: '💐' },
+  { id: 'vi4', tone: 'playful', relationship: 'friend', text: 'Chúc {name} điểm cao, áp lực thấp và luôn có thật nhiều trà sữa mỗi ngày! 🧋', icon: '🧋' },
+  { id: 'vi5', tone: 'poetic', relationship: 'friend', text: 'Dù mai này mỗi người một hướng, mong {name} vẫn nhớ 12A5 là kỷ niệm đẹp nhất của tuổi học trò.', icon: '✨' },
+  { id: 'vi6', tone: 'sincere', relationship: 'friend', text: 'Chúc {name} thật nhiều sức khỏe, đủ bình tĩnh để vượt qua mọi kỳ thi.', icon: '📚' },
+  { id: 'vi7', tone: 'playful', relationship: 'friend', text: 'Xin lỗi {name} vì quà đến trễ, nhưng tình cảm của tụi mình thì đến đúng giờ nhé! 😅', icon: '🎁' },
+  { id: 'vi8', tone: 'sincere', relationship: 'friend', text: 'Chúc mừng ngày 20/10, {name}! Mong bạn luôn được yêu thương và tỏa sáng.', icon: '💖' },
+];
+
+export function getWishDeck(relationship: RelationshipType, name: string, language: string = 'en'): WishTemplate[] {
+  if (language === 'vi') {
+    return shuffleArray(
+      VIETNAMESE_WISH_TEMPLATES.map(template => ({ ...template, text: template.text.replace(/{name}/g, name) }))
+    );
+  }
   let filtered = WISH_TEMPLATES.filter((template) => template.relationship === relationship);
   
   if (filtered.length === 0) {

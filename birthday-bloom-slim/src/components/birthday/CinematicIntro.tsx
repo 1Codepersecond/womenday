@@ -42,7 +42,7 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
     const { fireConfetti, fireStars, fireCinematicCelebration } = useConfetti();
     const { playType, playWhoosh, playReveal, playPop, playBoom } = useSoundManager();
     const { config, getAnimationPacing } = useBirthdayStore();
-    const { t, isHindi, isBengali, isFrench } = useTranslation();
+    const { t, isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
     const { name, age, relationship, favoriteColor, gender } = config;
 
     const pacing = getAnimationPacing();
@@ -122,6 +122,33 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
     const storyLines = useMemo(() => {
         const isMale = gender === 'male';
         const isFemale = gender === 'female';
+        if (isVietnamese) {
+            if (relationship === 'partner') {
+                return [
+                    "Có một người đã trở thành *trung tâm của cả thế giới* của mình...",
+                    "Người khiến từng khoảnh khắc trở nên như *một thước phim đẹp*... ✨",
+                    isMale ? "Người đàn ông với *sự mạnh mẽ và dịu dàng* đã thay đổi mọi thứ..." : isFemale ? "Người con gái với *sự dịu dàng và duyên dáng* làm sáng bừng mọi nơi cô ấy đến..." : "Người khiến mình tin vào *phép màu* mỗi ngày...",
+                    "Mình có thể chỉ nhắn một câu *'Mình yêu bạn'*...",
+                    "Nhưng một tin nhắn nhỏ không thể chứa hết *những gì mình dành cho bạn* 💖"
+                ];
+            }
+            if (relationship === 'friend') {
+                return [
+                    "Thông báo khẩn: hôm nay là ngày của *những cô gái tuyệt vời nhất lớp*! 🌸",
+                    "Ngày 20/10 đến rồi, và tụi mình thì... *hơi trễ một chút* 😅",
+                    "Gửi đến những bạn nữ đã *cùng cả lớp đi qua bao buổi học, bao tiếng cười*...",
+                    "Tụi mình đã định mua một món quà thật bình thường...",
+                    "Nhưng rồi nghĩ lại, các bạn xứng đáng có *một điều gì đó đặc biệt hơn* 💐"
+                ];
+            }
+            return [
+                "Hôm nay là một ngày thật *đặc biệt*...",
+                "Vì hôm nay, chúng mình muốn dành tặng những lời *chân thành nhất* ✨",
+                "Gửi đến những người có sự hiện diện là *món quà quý giá* đối với tất cả chúng mình...",
+                "Tụi mình muốn làm một điều gì đó thật *đáng nhớ*...",
+                "Nên hãy ngồi thoải mái và *cùng tận hưởng nhé*! ✨"
+            ];
+        }
         if (isFrench) {
             if (relationship === 'partner') {
                 return [
@@ -228,9 +255,31 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
             "I wanted to build something that lasts as long as our *treasured memories*...",
             "So, sit back, relax, and *enjoy your celebration*! ✨"
         ];
-    }, [relationship, gender, isHindi, isBengali, isFrench]);
+    }, [relationship, gender, isHindi, isBengali, isFrench, isVietnamese]);
 
     const postChatLines = useMemo(() => {
+        if (isVietnamese) {
+            if (relationship === 'friend')
+                return [
+                    "Vì các bạn không chỉ là những người bạn cùng lớp...",
+                    "Các bạn là những người luôn *làm cho 12A5 thêm rộn ràng và ấm áp* ☕️",
+                    "Các bạn xứng đáng có một lời chúc *thật đẹp như chính nụ cười của các bạn*...",
+                    "Nên là, *chúng mình bắt đầu thôi nào*! 🎉",
+                ];
+            if (relationship === 'partner')
+                return [
+                    "Nhưng bạn còn hơn cả một người bạn đồng hành với mình...",
+                    "Bạn là *nơi bình yên*, là *chuyến phiêu lưu đẹp nhất* của mình.",
+                    "Mình đã dành rất nhiều thời gian để chuẩn bị mọi chi tiết... *giống như cách mình nghĩ về bạn* ✨",
+                    "Bạn đã sẵn sàng cho *điều bất ngờ* chưa? ❤️",
+                ];
+            return [
+                "Các bạn mang đến thật nhiều *niềm vui và ánh sáng* cho mọi người...",
+                "Các bạn xứng đáng có một lời chúc *rực rỡ như nụ cười của chính mình*.",
+                "Tụi mình đã gửi vào đây *cả tấm lòng* dành riêng cho các bạn...",
+                "Nào, *chúng mình bắt đầu thôi*! ✨",
+            ];
+        }
         if (isFrench) {
             if (relationship === 'friend')
                 return [
@@ -317,9 +366,31 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
             "We put our whole hearts into this, just for you...",
             "Let the *celebration begin*! ✨",
         ];
-    }, [relationship, isHindi, isBengali, isFrench]);
+    }, [relationship, isHindi, isBengali, isFrench, isVietnamese]);
 
     const finalLines = useMemo(() => {
+        if (isVietnamese) {
+            if (relationship === 'partner')
+                return [
+                    `Gửi *${name || 'người thương'}* của mình 💖`,
+                    "Hy vọng bạn cảm nhận được *từng nhịp tim* ẩn sau mỗi hiệu ứng...",
+                    "Bạn là *hôm nay*, là *ngày mai* và là *mãi mãi* của mình ✨",
+                    "Chúc mừng ngày 20/10, *mình yêu bạn rất nhiều*! 💖"
+                ];
+            if (relationship === 'friend')
+                return [
+                    `Gửi *${name || 'các bạn nữ'}* thân yêu 💐`,
+                    "Chúc các bạn luôn *xinh đẹp, vui vẻ và thật nhiều niềm tin*!",
+                    "Cảm ơn các bạn đã *đồng hành cùng lớp mình* suốt thời gian qua 🌸",
+                    "Chúc mừng ngày Phụ nữ Việt Nam 20/10! ✨"
+                ];
+            return [
+                `Gửi *${name || 'các bạn'}* thân mến ✨`,
+                "Chúng mình chúc các bạn một năm thật *nhiều niềm vui và hạnh phúc*...",
+                "Mong những điều tốt đẹp luôn *quay trở lại với các bạn gấp bội* ✨",
+                "Chúng mình *thật lòng quý mến* các bạn! 💖"
+            ];
+        }
         if (isFrench) {
             if (relationship === 'partner')
                 return [
@@ -406,11 +477,13 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
             "May your kindness always come back to you *tenfold* ✨",
             "We *love you* so much! 💖"
         ];
-    }, [name, relationship, isHindi, isBengali, isFrench, t]);
+    }, [name, relationship, isHindi, isBengali, isFrench, isVietnamese, t]);
 
     const effectiveStoryLines = useMemo(() => {
         if (!age) return storyLines;
-        const ageLine = isFrench
+        const ageLine = isVietnamese
+            ? `Khi các bạn đang bước qua *năm ${age}* thật rực rỡ... ✨`
+            : isFrench
             ? `Alors que vous célébrez votre *${age}e année* de pure splendeur... ✨`
             : isBengali
                 ? `আপনার জীবনের *${age}-তম বছর* উদযাপন করতে করতে... ✨`
@@ -418,7 +491,7 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                     ? `आपके जीवन के *${age}वें खूबसूरत साल* का जश्न मनाते हुए... ✨`
                     : `As you celebrate your *${age}th magical year*... ✨`;
         return [...storyLines.slice(0, -1), ageLine, storyLines[storyLines.length - 1]];
-    }, [age, storyLines, isHindi, isBengali, isFrench]);
+    }, [age, storyLines, isHindi, isBengali, isFrench, isVietnamese]);
 
     const primaryColor = favoriteColor || '#FF2A6D';
 
@@ -723,7 +796,7 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                                     className="font-script text-6xl sm:text-8xl md:text-9xl lg:text-[13rem] font-bold text-gradient-romantic text-glow-rose break-words leading-tight"
                                 >
                                     <KineticText
-                                        text={name || (isFrench ? 'Vous' : isBengali ? 'আপনি' : isHindi ? 'आप' : 'You')}
+                                        text={name || (isVietnamese ? 'Các bạn' : isFrench ? 'Vous' : isBengali ? 'আপনি' : isHindi ? 'आप' : 'You')}
                                         animation="zoom-in"
                                         delay={500}
                                     />

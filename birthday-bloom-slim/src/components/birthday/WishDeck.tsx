@@ -49,6 +49,7 @@ const WishCard = ({
     const startedWritingRef = useRef(false);
     const fullText = wish.text;
     const isBlankCard = wish.id === "write-your-own";
+    const { isVietnamese } = useTranslation();
 
     // Reset handwriting only when the card identity/text changes or becomes the top card
     useEffect(() => {
@@ -156,13 +157,13 @@ const WishCard = ({
                             className="absolute top-6 left-6 z-20 rounded-full border-2 border-red-400 px-3 py-1 text-red-400 font-bold text-sm"
                             style={{ opacity: leftOpacity }}
                         >
-                            <X size={18} className="inline -mt-0.5" /> SKIP
+                            <X size={18} className="inline -mt-0.5" /> {isVietnamese ? "BỎ QUA" : "SKIP"}
                         </motion.div>
                         <motion.div
                             className="absolute top-6 right-6 z-20 rounded-full border-2 border-emerald-500 px-3 py-1 text-emerald-500 font-bold text-sm"
                             style={{ opacity: rightOpacity }}
                         >
-                            <Heart size={18} className="inline -mt-0.5 fill-emerald-500" /> PICK
+                            <Heart size={18} className="inline -mt-0.5 fill-emerald-500" /> {isVietnamese ? "CHỌN" : "PICK"}
                         </motion.div>
                     </>
                 )}
@@ -180,7 +181,7 @@ const WishCard = ({
                             <div className="text-center w-full">
                                 <Pencil size={32} className="mx-auto mb-4 text-[#a08060] opacity-40" />
                                 <p className="font-handwritten text-xl sm:text-2xl text-[#8B7355] italic">
-                                    Write your own wish...
+                                    {isVietnamese ? "Viết lời chúc của riêng bạn..." : "Write your own wish..."}
                                 </p>
                             </div>
                         ) : (
@@ -224,16 +225,16 @@ type DeckPhase = "browsing" | "confirming" | "customizing" | "releasing" | "done
 
 export const WishDeck = () => {
     const { config } = useBirthdayStore();
-    const { isHindi, isBengali, isFrench } = useTranslation();
+    const { isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
     
     const { name, relationship } = config;
     const primaryColor = config.favoriteColor || "#FF6B6B";
 
     // Build the deck once per relationship/name combo
     const deck = useMemo(() => {
-        const templates = getWishDeck(relationship, name);
+        const templates = getWishDeck(relationship, name, isVietnamese ? 'vi' : 'en');
         return [...templates, { ...WRITE_YOUR_OWN_CARD, text: "" }];
-    }, [relationship, name]);
+    }, [relationship, name, isVietnamese]);
 
     // Random rotations for each card in the deck (pre-computed for stability)
     const rotations = useMemo(
@@ -270,7 +271,9 @@ export const WishDeck = () => {
     }, []);
 
     // Heading text
-    const heading = isBengali
+    const heading = isVietnamese
+        ? "Lời chúc dành cho các bạn ✨"
+        : isBengali
         ? "আপনার জন্য অফুরন্ত শুভকামনা ✨"
         : isHindi
         ? "आपके लिए ढेरों दुआएं ✨"
@@ -403,7 +406,7 @@ export const WishDeck = () => {
                             onClick={swipeLeft}
                             disabled={isAtEnd}
                             className="w-14 h-14 rounded-full border-2 border-white/15 bg-white/5 backdrop-blur-sm flex items-center justify-center text-white/60 hover:text-red-400 hover:border-red-400/40 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                            aria-label="Skip this wish"
+                            aria-label={isVietnamese ? "Bỏ qua lời chúc này" : "Skip this wish"}
                         >
                             <X size={24} />
                         </button>
@@ -412,7 +415,7 @@ export const WishDeck = () => {
                             type="button"
                             onClick={swipeRight}
                             className="w-16 h-16 rounded-full border-2 border-emerald-500/30 bg-emerald-500/10 backdrop-blur-sm flex items-center justify-center text-emerald-400 hover:bg-emerald-500/20 hover:border-emerald-500/50 transition-all shadow-[0_0_20px_rgba(16,185,129,0.15)]"
-                            aria-label="Select this wish"
+                            aria-label={isVietnamese ? "Chọn lời chúc này" : "Select this wish"}
                         >
                             <Heart size={28} className="fill-emerald-400" />
                         </button>
@@ -460,21 +463,21 @@ export const WishDeck = () => {
                             onClick={handleUseWish}
                             className="px-8 py-4 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-lg shadow-xl hover:scale-105 transition-transform flex items-center gap-2"
                         >
-                            <Send size={18} /> Use This Wish
+                            <Send size={18} /> {isVietnamese ? "Dùng lời chúc này" : "Use This Wish"}
                         </button>
                         <button
                             type="button"
                             onClick={handleCustomize}
                             className="px-8 py-4 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm text-white/80 font-semibold hover:bg-white/10 transition-all flex items-center gap-2"
                         >
-                            <Pencil size={16} /> Customize It
+                            <Pencil size={16} /> {isVietnamese ? "Chỉnh sửa" : "Customize It"}
                         </button>
                         <button
                             type="button"
                             onClick={() => setPhase("browsing")}
                             className="px-6 py-3 text-white/40 hover:text-white/70 text-sm transition-colors"
                         >
-                            ← Back to deck
+                            {isVietnamese ? "← Quay lại" : "← Back to deck"}
                         </button>
                     </div>
                 </motion.div>
@@ -508,7 +511,7 @@ export const WishDeck = () => {
                                 ref={textareaRef}
                                 value={customText}
                                 onChange={(e) => setCustomText(e.target.value)}
-                                placeholder={`Write a birthday wish for ${name}...`}
+                                placeholder={isVietnamese ? `Viết lời chúc 20/10 gửi ${name}...` : `Write a birthday wish for ${name}...`}
                                 className="w-full h-[240px] sm:h-[280px] bg-transparent resize-none outline-none font-handwritten text-xl sm:text-2xl text-[#2B1B0E] leading-relaxed placeholder:text-[#b8956a]/40"
                                 maxLength={300}
                             />
@@ -525,7 +528,7 @@ export const WishDeck = () => {
                             disabled={!customText.trim()}
                             className="px-8 py-4 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold text-lg shadow-xl hover:scale-105 transition-transform flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
                         >
-                            <Send size={18} /> Send to the World
+                            <Send size={18} /> {isVietnamese ? "Gửi lời chúc" : "Send to the World"}
                         </button>
                         <button
                             type="button"
@@ -538,7 +541,7 @@ export const WishDeck = () => {
                             }}
                             className="px-6 py-3 text-white/40 hover:text-white/70 text-sm transition-colors"
                         >
-                            ← Back
+                            {isVietnamese ? "← Quay lại" : "← Back"}
                         </button>
                     </div>
                 </motion.div>
@@ -610,10 +613,12 @@ export const WishDeck = () => {
                         💫
                     </motion.div>
                     <h3 className="text-3xl sm:text-4xl font-display font-black text-white mb-4">
-                        {isBengali ? "শুভকামনা পাঠানো হয়েছে!" : isHindi ? "शुभकामना भेज दी गई!" : isFrench ? "Vœu envoyé !" : "Wish Sent!"}
+                        {isVietnamese ? "Đã gửi lời chúc!" : isBengali ? "শুভকামনা পাঠানো হয়েছে!" : isHindi ? "शुभकामना भेज दी गई!" : isFrench ? "Vœu envoyé !" : "Wish Sent!"}
                     </h3>
                     <p className="text-white/50 text-lg mb-8 max-w-xs mx-auto">
-                        {isBengali
+                        {isVietnamese
+                            ? "Tình cảm của các bạn đã được gửi đi khắp muôn nơi ✨"
+                            : isBengali
                             ? "আপনার ভালোবাসা মহাবিশ্বে ছড়িয়ে পড়েছে ✨"
                             : isHindi
                             ? "आपका प्यार ब्रह्मांड में फैल गया ✨"
@@ -626,7 +631,7 @@ export const WishDeck = () => {
                         onClick={handleRestart}
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/15 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all text-sm"
                     >
-                        <RotateCcw size={14} /> Browse Again
+                        <RotateCcw size={14} /> {isVietnamese ? "Xem lại" : "Browse Again"}
                     </button>
                 </motion.div>
             )}

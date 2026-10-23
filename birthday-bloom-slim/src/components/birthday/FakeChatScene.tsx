@@ -130,7 +130,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
 
     const { playType, playWhoosh, playReveal, playPop } = useSoundManager();
     const { config } = useBirthdayStore();
-    const { t, isHindi, isBengali, isFrench } = useTranslation();
+    const { t, isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
     const { name, relationship, favoriteColor, gender } = config;
 
     const isMale = gender === "male";
@@ -140,6 +140,23 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
     const basicText = t("common.happyBirthday");
 
     const heartfeltText = useMemo(() => {
+        if (isVietnamese) {
+            if (relationship === "partner")
+                return isMale ? "Gửi người đàn ông làm tim mình rung động... ❤️" : isFemale ? "Gửi người con gái trong mơ của mình... ❤️" : "Gửi người làm cho mình trọn vẹn... ❤️";
+            if (relationship === "friend")
+                return "Khoan đã, chỉ một tin nhắn thôi á? Không phải phong cách của tụi mình! 😂🌸";
+            if (relationship === "brother" || relationship === "sibling")
+                return "Chỉ một tin nhắn cho người anh tuyệt nhất? Không đời nào! 🏆";
+            if (relationship === "sister")
+                return "Chỉ một tin nhắn cho người chị em yêu quý? Bạn xứng đáng có cả một thế giới! 🌸✨";
+            if (relationship === "father")
+                return "Một tin nhắn thì không đủ để cảm ơn người hùng của mình... 🌟💪";
+            if (relationship === "mother")
+                return "Một tin nhắn không thể nói hết tình yêu dành cho mẹ... 💐💛";
+            if (relationship === "mentor" || relationship === "colleague")
+                return "Chỉ một lời chúc đơn giản cho nguồn cảm hứng như vậy? Tụi mình làm tốt hơn thế! 🎯✨";
+            return "Một tin nhắn nhỏ không thể nói hết tình cảm của tụi mình... 💝🌟";
+        }
         if (isFrench) {
             if (relationship === "partner")
                 return isMale ? "Pour l'homme qui fait battre mon cœur... ❤️" : isFemale ? "Pour la femme de mes rêves... ❤️" : "Pour l'âme qui me complète... ❤️";
@@ -208,7 +225,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
         if (relationship === "mentor" || relationship === "colleague")
             return "A regular birthday ping? For our greatest inspiration? We built something better! 🎯✨";
         return "A simple text could never capture how much you mean to our family... 💝🌟";
-    }, [relationship, isMale, isFemale, isHindi, isBengali, isFrench]);
+    }, [relationship, isMale, isFemale, isHindi, isBengali, isFrench, isVietnamese]);
 
     const triggerHeartBurst = useCallback((clientX?: number, clientY?: number) => {
         playPop();
@@ -395,7 +412,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
     }, [onComplete, playType, playWhoosh, playReveal, playPop, basicText, heartfeltText]);
 
     const emojiKit = useMemo(() => getTemplateEmojiKit(config), [config]);
-    const contactName = name || (relationship === "partner" ? "My Love" : relationship === "friend" ? "Bestie 🔥" : "Family 🌟");
+    const contactName = name || (isVietnamese ? "Các bạn nữ 12A5 💐" : relationship === "partner" ? "My Love" : relationship === "friend" ? "Bestie 🔥" : "Family 🌟");
     const avatarEmoji = emojiKit.chat?.avatar || (relationship === "partner" ? "💖" : relationship === "friend" ? "😎" : "👑");
     const floatingBadges = useMemo(
         () => (emojiKit.floating?.length >= 4 ? emojiKit.floating.slice(0, 4) : ["💖", "✨", "🌹", "🦋"]),
@@ -566,7 +583,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                         <div className="flex items-center gap-2">
                             <button
                                 type="button"
-                                aria-label="Go back"
+                                aria-label={isVietnamese ? "Quay lại" : "Go back"}
                                 className="w-9 h-9 -ml-1 flex items-center justify-center text-white/90 hover:text-white rounded-full transition-colors active:scale-95"
                             >
                                 <ChevronLeft size={24} />
@@ -590,10 +607,10 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                                 <span className="text-[10px] text-[#00E676] font-medium tracking-normal normal-case flex items-center gap-1">
                                     {phase === "typing-basic" || phase === "typing-heartfelt" ? (
                                         <span className="text-white/60 italic flex items-center gap-0.5">
-                                            typing<span className="animate-pulse">...</span>
+                                            {isVietnamese ? "đang nhập" : "typing"}<span className="animate-pulse">...</span>
                                         </span>
                                     ) : (
-                                        "Active now"
+                                        (isVietnamese ? "Đang hoạt động" : "Active now")
                                     )}
                                 </span>
                             </div>
@@ -603,21 +620,21 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                         <div className="flex items-center gap-0.5 text-white/80">
                             <button
                                 type="button"
-                                aria-label="Voice call"
+                                aria-label={isVietnamese ? "Gọi thoại" : "Voice call"}
                                 className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 active:scale-95 transition-all text-white/80 hover:text-white"
                             >
                                 <Phone size={17} />
                             </button>
                             <button
                                 type="button"
-                                aria-label="Video call"
+                                aria-label={isVietnamese ? "Gọi video" : "Video call"}
                                 className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 active:scale-95 transition-all text-white/80 hover:text-white"
                             >
                                 <Video size={19} />
                             </button>
                             <button
                                 type="button"
-                                aria-label="Chat details"
+                                aria-label={isVietnamese ? "Chi tiết cuộc trò chuyện" : "Chat details"}
                                 className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 active:scale-95 transition-all text-white/80 hover:text-white"
                             >
                                 <Info size={18} />
@@ -633,7 +650,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                         {/* Centered Timestamp Pill */}
                         <div className="text-center my-0.5">
                             <span className="px-2.5 py-0.5 rounded-full bg-white/5 text-[10px] text-white/55 tracking-normal normal-case font-medium backdrop-blur-md border border-white/5">
-                                Today • 12:00 AM
+                                {isVietnamese ? "Hôm nay • 00:00" : "Today • 12:00 AM"}
                             </span>
                         </div>
 
@@ -715,10 +732,10 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                                     >
                                         {phase === "seen" || phase === "climax" || phase === "done" ? (
                                             <span className="flex items-center gap-1 text-rose-300/85">
-                                                Seen just now • <Heart size={9} fill="#FF2A6D" className="inline text-[#FF2A6D]" />
+                                                {isVietnamese ? "Vừa xem xong" : "Seen just now"} • <Heart size={9} fill="#FF2A6D" className="inline text-[#FF2A6D]" />
                                             </span>
                                         ) : (
-                                            <span>Delivered</span>
+                                            <span>{isVietnamese ? "Đã gửi" : "Delivered"}</span>
                                         )}
                                     </motion.div>
                                 </motion.div>
@@ -760,7 +777,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                             {/* Blue Camera Button */}
                             <button
                                 type="button"
-                                aria-label="Open camera"
+                                aria-label={isVietnamese ? "Mở máy ảnh" : "Open camera"}
                                 className="w-9 h-9 rounded-full bg-[#3797EF] flex items-center justify-center text-white shadow-md hover:opacity-90 active:scale-95 transition-all shrink-0 mb-0.5"
                             >
                                 <Camera size={17} />
@@ -791,21 +808,21 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                                 >
                                     <button
                                         type="button"
-                                        aria-label="Record voice note"
+                                        aria-label={isVietnamese ? "Ghi âm" : "Record voice note"}
                                         className="w-7 h-7 flex items-center justify-center hover:text-white transition-colors"
                                     >
                                         <Mic size={16} />
                                     </button>
                                     <button
                                         type="button"
-                                        aria-label="Attach photo"
+                                        aria-label={isVietnamese ? "Đính kèm ảnh" : "Attach photo"}
                                         className="w-7 h-7 flex items-center justify-center hover:text-white transition-colors"
                                     >
                                         <ImageIcon size={16} />
                                     </button>
                                     <button
                                         type="button"
-                                        aria-label="Add sticker or emoji"
+                                        aria-label={isVietnamese ? "Thêm nhãn dán hoặc biểu tượng cảm xúc" : "Add sticker or emoji"}
                                         className="w-7 h-7 flex items-center justify-center hover:text-white transition-colors"
                                     >
                                         <Smile size={16} />
@@ -816,7 +833,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                             {/* Send Button with Realistic Depress + Darken Animation */}
                             <button
                                 type="button"
-                                aria-label="Send message"
+                                aria-label={isVietnamese ? "Gửi tin nhắn" : "Send message"}
                                 onClick={() => handleManualKeyPress("send")}
                                 className={`w-9 h-9 rounded-full flex items-center justify-center text-white shrink-0 mb-0.5 transition-all duration-150 ${
                                     isSendDepressed
@@ -857,7 +874,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                                     className="grid grid-cols-3 items-center text-center pb-1.5 mb-1 border-b border-white/5 text-[11px] text-white/75"
                                 >
                                     <span className="truncate px-2 border-r border-white/10 text-white/60">
-                                        {currentTypedWord ? `"${currentTypedWord}"` : '"Happy"'}
+                                        {currentTypedWord ? `"${currentTypedWord}"` : (isVietnamese ? '"Chúc"' : '"Happy"')}
                                     </span>
                                     <span
                                         className={`truncate px-2 border-r border-white/10 font-medium transition-colors ${
@@ -866,7 +883,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                                                 : "text-white/90"
                                         }`}
                                     >
-                                        {currentTypedWord || "Birthday"}
+                                        {currentTypedWord || (isVietnamese ? "mừng" : "Birthday")}
                                     </span>
                                     <span className="truncate px-2 text-white/80">
                                         {phase === "typing-heartfelt" ? "💝 🌟" : "🎂 ✨"}
@@ -933,7 +950,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                                         {/* Backspace Key (Darkens & depresses during deleting phase) */}
                                         <button
                                             type="button"
-                                            aria-label="Backspace"
+                                            aria-label={isVietnamese ? "Xóa" : "Backspace"}
                                             data-key="backspace"
                                             data-active={activeKey === "backspace" ? "true" : "false"}
                                             onClick={() => handleManualKeyPress("backspace")}
@@ -965,7 +982,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
 
                                         <button
                                             type="button"
-                                            aria-label="Emoji key"
+                                            aria-label={isVietnamese ? "Phím biểu tượng cảm xúc" : "Emoji key"}
                                             data-key="emoji"
                                             data-active={activeKey === "emoji" ? "true" : "false"}
                                             onClick={() => handleManualKeyPress("emoji")}
@@ -981,7 +998,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                                         {/* Spacebar */}
                                         <button
                                             type="button"
-                                            aria-label="Space"
+                                            aria-label={isVietnamese ? "Dấu cách" : "Space"}
                                             data-key="space"
                                             data-active={activeKey === "space" ? "true" : "false"}
                                             onClick={() => handleManualKeyPress("space")}
@@ -997,7 +1014,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                                         {/* Keyboard Send / Return Key */}
                                         <button
                                             type="button"
-                                            aria-label="Keyboard send"
+                                            aria-label={isVietnamese ? "Gửi bằng bàn phím" : "Keyboard send"}
                                             data-key="send"
                                             data-active={isSendDepressed ? "true" : "false"}
                                             onClick={() => handleManualKeyPress("send")}
@@ -1007,7 +1024,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                                                     : "bg-[#3797EF] shadow-[0_1.5px_0_#000000] border-t border-white/20"
                                             }`}
                                         >
-                                            <span>Send</span>
+                                            <span>{isVietnamese ? "Gửi" : "Send"}</span>
                                             <CornerDownLeft size={12} />
                                         </button>
                                     </div>
@@ -1036,7 +1053,11 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
                                 </div>
                                 <p className="text-lg sm:text-xl font-bold normal-case tracking-normal leading-snug bg-gradient-to-r from-white via-rose-200 to-amber-200 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(255,255,255,0.4)]">
                                     {relationship === "partner"
-                                        ? isFrench
+                                        ? isVietnamese
+                                            ? isMale
+                                                ? "Vì một chàng hoàng tử như bạn xứng đáng nhận nhiều hơn một tin nhắn... ✨"
+                                                : "Vì một nàng công chúa như bạn xứng đáng nhận nhiều hơn một tin nhắn... ✨"
+                                        : isFrench
                                             ? isMale
                                                 ? "Parce qu'un prince comme toi mérite bien plus qu'un simple message... ✨"
                                                 : "Parce qu'une princesse comme toi mérite bien plus qu'un simple message... ✨"

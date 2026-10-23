@@ -5,7 +5,7 @@ import { Sparkles, Heart, Users, Home } from "lucide-react";
 
 const NotFound: React.FC = () => {
   const location = useLocation();
-  const { isHindi, isBengali, isFrench } = useTranslation();
+  const { isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
 
   useEffect(() => {
     document.title = "404: Page Not Found | Birthday Bloom";
@@ -29,7 +29,9 @@ const NotFound: React.FC = () => {
     };
   }, [location.pathname]);
 
-  const titleText = isFrench
+  const titleText = isVietnamese
+    ? "Ôi! Không tìm thấy trang"
+    : isFrench
     ? "Oups ! Page introuvable"
     : isBengali
       ? "উফ! পেজটি পাওয়া যায়নি"
@@ -37,7 +39,9 @@ const NotFound: React.FC = () => {
         ? "ओह! यह पेज नहीं मिला"
         : "Oops! Page not found";
 
-  const descriptionText = isFrench
+  const descriptionText = isVietnamese
+    ? "Trang chúc mừng bạn đang tìm có thể đã bị di chuyển hoặc không tồn tại."
+    : isFrench
     ? "Cette page d'anniversaire semble s'être envolée dans les étoiles..."
     : isBengali
       ? "আপনার কাঙ্ক্ষিত জন্মদিনের পেজটি খুঁজে পাওয়া যায়নি বা মুছে ফেলা হয়েছে।"
@@ -73,7 +77,7 @@ const NotFound: React.FC = () => {
             className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-primary hover:bg-primary/90 text-black font-bold transition-all shadow-[0_0_20px_rgba(255,107,130,0.4)] hover:scale-105 active:scale-95"
           >
             <Home className="w-4 h-4" />
-            {isFrench ? "Retour à l'accueil" : isBengali ? "হোমে ফিরে যান" : isHindi ? "मुख्य पृष्ठ पर लौटें" : "Return to Home"}
+            {isVietnamese ? "Về trang chủ" : isFrench ? "Retour à l'accueil" : isBengali ? "হোমে ফিরে যান" : isHindi ? "मुख्य पृष्ठ पर लौटें" : "Return to Home"}
           </Link>
 
           <Link
@@ -81,7 +85,7 @@ const NotFound: React.FC = () => {
             className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-medium border border-white/15 transition-all hover:scale-105 active:scale-95"
           >
             <Heart className="w-4 h-4 text-rose-400" />
-            {isFrench ? "Surprise Romantique" : isBengali ? "রোমান্টিক উপহার" : isHindi ? "रोमांटिक सरप्राइज" : "Romantic Surprise"}
+            {isVietnamese ? "Bất ngờ lãng mạn" : isFrench ? "Surprise Romantique" : isBengali ? "রোমান্টিক উপহার" : isHindi ? "रोमांटिक सरप्राइज" : "Romantic Surprise"}
           </Link>
 
           <Link
@@ -89,7 +93,7 @@ const NotFound: React.FC = () => {
             className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-medium border border-white/15 transition-all hover:scale-105 active:scale-95"
           >
             <Users className="w-4 h-4 text-amber-400" />
-            {isFrench ? "Fête d'Amis" : isBengali ? "বন্ধুর সেলিব্রেশন" : isHindi ? "दोस्त का उत्सव" : "Friend Party"}
+            {isVietnamese ? "Tiệc bạn bè" : isFrench ? "Fête d'Amis" : isBengali ? "বন্ধুর সেলিব্রেশন" : isHindi ? "दोस्त का उत्सव" : "Friend Party"}
           </Link>
         </div>
       </div>

@@ -7,7 +7,7 @@ import { useTranslation } from "@/i18n";
 export const SoundToggle = () => {
     const [isMuted, setIsMuted] = useState(false);
     const { setBgVolume, setMuted } = useSoundManager();
-    const { isFrench, isBengali, isHindi } = useTranslation();
+    const { isFrench, isBengali, isHindi, isVietnamese } = useTranslation();
 
     const handleToggle = useCallback(() => {
         setIsMuted((prev) => {
@@ -19,13 +19,17 @@ export const SoundToggle = () => {
     }, [setBgVolume, setMuted]);
 
     const label = isMuted
-        ? isFrench
+        ? isVietnamese
+            ? "Bật âm thanh"
+            : isFrench
             ? "Activer le son"
             : isBengali
             ? "শব্দ চালু করুন"
             : isHindi
             ? "आवाज़ चालू करें"
             : "Unmute Audio"
+        : isVietnamese
+        ? "Tắt âm thanh"
         : isFrench
         ? "Couper le son"
         : isBengali

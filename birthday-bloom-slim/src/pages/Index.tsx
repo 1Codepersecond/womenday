@@ -32,11 +32,11 @@ const Index = () => {
     const [fireworksRunKey, setFireworksRunKey] = useState(0);
     const isMobile = useIsMobile();
     const config = useBirthdayStore((state) => state.config);
-    const { t } = useTranslation();
+    const { t, isVietnamese } = useTranslation();
     useDynamicTheme();
     useDynamicSEO(config);
 
-    return (<main aria-label="Birthday Celebration Experience" className="min-h-screen transition-colors duration-1000 relative overflow-hidden" style={{ background: 'var(--bg-gradient, #1a0515)' }}>
+    return (<main aria-label={isVietnamese ? "Trải nghiệm chúc mừng 20/10" : "Birthday Celebration Experience"} className="min-h-screen transition-colors duration-1000 relative overflow-hidden" style={{ background: 'var(--bg-gradient, #1a0515)' }}>
       {/* Dreamy Ambient Bokeh Auras (Zero-filter GPU-optimized multi-stop radial gradients) */}
       <div className="fixed top-[5%] left-[8%] w-[38rem] h-[38rem] rounded-full bg-[radial-gradient(circle,rgba(255,75,130,0.16)_0%,rgba(255,75,130,0.08)_40%,transparent_70%)] pointer-events-none animate-subtle-float" />
       <div className="fixed top-[20%] right-[8%] w-[34rem] h-[34rem] rounded-full bg-[radial-gradient(circle,rgba(255,200,100,0.14)_0%,rgba(255,200,100,0.05)_40%,transparent_70%)] pointer-events-none animate-pulse" />

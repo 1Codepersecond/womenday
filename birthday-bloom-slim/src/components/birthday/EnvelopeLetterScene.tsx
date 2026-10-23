@@ -48,7 +48,7 @@ export const EnvelopeLetterScene = ({
 
     const { config } = useBirthdayStore();
     const { playPop, playWhoosh, playType } = useSoundManager();
-    const { isHindi, isBengali, isFrench, language } = useTranslation();
+    const { isHindi, isBengali, isFrench, isVietnamese, language } = useTranslation();
     const isMobile = useIsMobile();
     const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -63,7 +63,7 @@ export const EnvelopeLetterScene = ({
 
         // Get highly specific tailored letter for recipient archetype, gender, and interests
         const generated = getHighlySpecificLetter(
-            config.name || (isFrench ? "Mon Amour" : isBengali ? "প্রিয়" : isHindi ? "प्रिय" : "My Dearest"),
+            config.name || (isVietnamese ? "Các bạn thân yêu" : isFrench ? "Mon Amour" : isBengali ? "প্রিয়" : isHindi ? "प्रिय" : "My Dearest"),
             relationship,
             config.gender || "female",
             config.interests || [],
@@ -257,7 +257,9 @@ export const EnvelopeLetterScene = ({
                                 💜
                             </span>
                             <h3 className="font-display italic text-2xl sm:text-3xl text-white font-bold tracking-wide mt-2 drop-shadow-lg">
-                                {isFrench
+                                {isVietnamese
+                                    ? "Trong lúc đó, có một món quà nhỏ 💌"
+                                    : isFrench
                                     ? "Pendant ce temps, la surprise 😭💌"
                                     : isBengali
                                         ? "এদিকে তোমার জন্য বিশেষ চিঠি 😭💌"
@@ -305,7 +307,7 @@ export const EnvelopeLetterScene = ({
                                 className="absolute bottom-3 w-[88%] h-[60%] bg-[#FAF5EA] rounded-xl shadow-inner border border-[#E8DFC8] flex items-center justify-center z-10"
                             >
                                 <p className="font-script text-xs sm:text-sm text-[#8B5A2B] opacity-70">
-                                    {isFrench ? "Pour toi..." : isBengali ? "তোমার জন্য..." : isHindi ? "आपके लिए..." : "For you..."}
+                                    {isVietnamese ? "Gửi các bạn..." : isFrench ? "Pour toi..." : isBengali ? "তোমার জন্য..." : isHindi ? "आपके लिए..." : "For you..."}
                                 </p>
                             </motion.div>
                         </div>
@@ -313,8 +315,8 @@ export const EnvelopeLetterScene = ({
                         <p className="font-display text-xs sm:text-sm tracking-widest uppercase text-white/50 mt-4 flex items-center gap-2">
                             <Sparkles size={14} className="text-primary animate-pulse" />
                             {isOpen
-                                ? (isFrench ? "Ouverture de la lettre..." : isBengali ? "চিঠি খোলা হচ্ছে..." : isHindi ? "पत्र खुल रहा है..." : "Opening letter...")
-                                : (isFrench ? "Appuyez pour ouvrir 💌" : isBengali ? "চিঠি খুলতে স্পর্শ করুন 💌" : isHindi ? "खोलने के लिए टैप करें 💌" : "Tap to open letter 💌")}
+                                ? (isVietnamese ? "Đang mở thư..." : isFrench ? "Ouverture de la lettre..." : isBengali ? "চিঠি খোলা হচ্ছে..." : isHindi ? "पत्र खुल रहा है..." : "Opening letter...")
+                                : (isVietnamese ? "Chạm để mở thư 💌" : isFrench ? "Appuyez pour ouvrir 💌" : isBengali ? "চিঠি খুলতে স্পর্শ করুন 💌" : isHindi ? "खोलने के लिए टैप करें 💌" : "Tap to open letter 💌")}
                         </p>
                     </motion.div>
                 ) : (
@@ -383,7 +385,9 @@ export const EnvelopeLetterScene = ({
                         <div className="relative z-10 text-center mb-6 sm:mb-8 pr-12 sm:pr-14">
                             <h2 className="font-display italic text-2xl sm:text-4xl font-bold text-[#3B1F2B] tracking-tight drop-shadow-[0_1px_2px_rgba(255,255,255,0.8)]">
                                 {config.letterTitle || (
-                                    isFrench
+                                    isVietnamese
+                                        ? "Lời nhắn từ trái tim"
+                                        : isFrench
                                         ? "Un Message de Mon Cœur"
                                         : isBengali
                                             ? "আমার হৃদয়ের এক বিশেষ চিঠি"
@@ -433,7 +437,7 @@ export const EnvelopeLetterScene = ({
                                     onClick={onComplete}
                                     className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-[#A60F35] via-[#D11A48] to-[#FF2A6D] text-white font-semibold text-sm sm:text-base tracking-wide shadow-[0_10px_25px_rgba(166,15,53,0.4)] hover:shadow-[0_15px_35px_rgba(166,15,53,0.6)] transition-all duration-300 hover:scale-105 active:scale-95 border border-[#FFD166]/40"
                                 >
-                                    <span>{isFrench ? "Continuer la Fête ✨" : isBengali ? "উদযাপনে এগিয়ে যান ✨" : isHindi ? "जश्न जारी रखें ✨" : "Continue Celebration ✨"}</span>
+                                    <span>{isVietnamese ? "Tiếp tục ✨" : isFrench ? "Continuer la Fête ✨" : isBengali ? "উদযাপনে এগিয়ে যান ✨" : isHindi ? "जश्न जारी रखें ✨" : "Continue Celebration ✨"}</span>
                                     <ArrowRight size={17} />
                                 </button>
                             </motion.div>

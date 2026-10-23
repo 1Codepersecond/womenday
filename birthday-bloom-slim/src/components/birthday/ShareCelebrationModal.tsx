@@ -24,7 +24,7 @@ interface ShareCelebrationModalProps {
 
 export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ isOpen, onClose }) => {
   const { config } = useBirthdayStore();
-  const { language, isBengali, isHindi, isFrench } = useTranslation();
+  const { language, isBengali, isHindi, isFrench, isVietnamese } = useTranslation();
   
   const [customName, setCustomName] = useState(config.name || '');
   const [customRel, setCustomRel] = useState<RelationshipType>(config.relationship || 'partner');
@@ -75,14 +75,18 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
   const targetName = activeTab === 'customize' ? customName : (config.name || '');
   
   const shareText = targetName
-    ? (isFrench 
+    ? (isVietnamese
+        ? `✨ Cùng gửi lời chúc 20/10 đến ${targetName} nhé! 💐🎉`
+        : isFrench 
         ? `✨ Venez célébrer l'anniversaire magique de ${targetName} sur Birthday Bloom ! 🎂🎉`
         : isBengali
           ? `✨ ${targetName}-এর জাদুকরী জন্মদিনের উদযাপনে যোগ দিন Birthday Bloom-এ! 🎂🎉`
           : isHindi
             ? `✨ ${targetName} के जादुई जन्मदिन के जश्न में शामिल हों Birthday Bloom पर! 🎂🎉`
             : `✨ Join me in celebrating ${targetName}'s magical birthday surprise on Birthday Bloom! 🎂🎉`)
-    : (isFrench
+    : (isVietnamese
+        ? `✨ Món quà 20/10 từ các bạn nam lớp 12A5 gửi tặng các bạn nữ! 💐🎉`
+        : isFrench
         ? `✨ Découvrez cette expérience magique de célébration d'anniversaire sur Birthday Bloom ! 🎂🎉`
         : isBengali
           ? `✨ Birthday Bloom-এ একটি অসাধারণ জাদুকরী জন্মদিনের ওয়েবসাইটের অভিজ্ঞতা নিন! 🎂🎉`
@@ -96,7 +100,9 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
         await navigator.clipboard.writeText(activeShareUrl);
         setCopied(true);
         toast.success(
-          isFrench 
+          isVietnamese 
+            ? "Đã sao chép liên kết! ✨" 
+            : isFrench 
             ? "Lien copié dans le presse-papier ! ✨" 
             : isBengali 
               ? "লিংক কপি করা হয়েছে! ✨" 
@@ -107,7 +113,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
         setTimeout(() => setCopied(false), 2500);
       }
     } catch {
-      toast.error("Failed to copy link");
+      toast.error(isVietnamese ? "Không sao chép được liên kết" : "Failed to copy link");
     }
   };
 
@@ -115,7 +121,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
-          title: `Birthday Bloom — ${targetName || 'Magical Celebration'}`,
+          title: isVietnamese ? `Quà 20/10 — ${targetName || 'Các bạn nữ 12A5'}` : `Birthday Bloom — ${targetName || 'Magical Celebration'}`,
           text: shareText,
           url: activeShareUrl,
         });
@@ -188,7 +194,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close modal"
+            aria-label={isVietnamese ? "Đóng cửa sổ" : "Close modal"}
             className="absolute top-5 right-5 rounded-full p-2 text-white/50 hover:text-white hover:bg-white/10 transition-colors"
           >
             <X size={20} />
@@ -200,10 +206,12 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
               <Share2 className="text-primary" size={28} />
             </div>
             <h3 id="share-modal-title" className="font-display text-2xl sm:text-3xl font-black text-white">
-              {isFrench ? "Partager la Célébration ✨" : isBengali ? "উদযাপন শেয়ার করুন ✨" : isHindi ? "जश्न शेयर करें ✨" : "Share Celebration ✨"}
+              {isVietnamese ? "Chia sẻ lời chúc ✨" : isFrench ? "Partager la Célébration ✨" : isBengali ? "উদযাপন শেয়ার করুন ✨" : isHindi ? "जश्न शेयर करें ✨" : "Share Celebration ✨"}
             </h3>
             <p className="text-white/60 text-xs sm:text-sm mt-1">
-              {isFrench 
+              {isVietnamese 
+                ? "Gửi món quà bất ngờ này hoặc tạo một liên kết riêng cho người đặc biệt" 
+                : isFrench 
                 ? "Envoyez cette surprise magique ou créez-en une nouvelle pour vos proches"
                 : isBengali
                   ? "এই জাদুকরী সারপ্রাইজটি পাঠান বা প্রিয়জনের জন্য নতুন তৈরি করুন"
@@ -225,7 +233,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
               }`}
             >
               <Send size={14} />
-              {isFrench ? "Partager Maintenant" : isBengali ? "এখনই শেয়ার করুন" : isHindi ? "अभी शेयर करें" : "Quick Share"}
+              {isVietnamese ? "Chia sẻ nhanh" : isFrench ? "Partager Maintenant" : isBengali ? "এখনই শেয়ার করুন" : isHindi ? "अभी शेयर करें" : "Quick Share"}
             </button>
             <button
               type="button"
@@ -237,7 +245,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
               }`}
             >
               <Sparkles size={14} />
-              {isFrench ? "Créer pour Quelqu'un" : isBengali ? "নতুন তৈরি করুন" : isHindi ? "नया बनाएं" : "Customize Surprise"}
+              {isVietnamese ? "Tùy chỉnh quà" : isFrench ? "Créer pour Quelqu'un" : isBengali ? "নতুন তৈরি করুন" : isHindi ? "नया बनाएं" : "Customize Surprise"}
             </button>
           </div>
 
@@ -246,7 +254,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <div className="space-y-4 mb-6 text-left">
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-white/70 mb-1.5">
-                  {isFrench ? "Nom du Destinataire" : isBengali ? "যার জন্মদিন (নাম)" : isHindi ? "जिसका जन्मदिन है (नाम)" : "Recipient Name"}
+                  {isVietnamese ? "Tên người nhận" : isFrench ? "Nom du Destinataire" : isBengali ? "যার জন্মদিন (নাম)" : isHindi ? "जिसका जन्मदिन है (नाम)" : "Recipient Name"}
                 </label>
                 <input
                   type="text"
@@ -260,54 +268,54 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider text-white/70 mb-1.5">
-                    {isFrench ? "Relation" : isBengali ? "সম্পর্ক" : isHindi ? "रिश्ता" : "Relationship"}
+                    {isVietnamese ? "Mối quan hệ" : isFrench ? "Relation" : isBengali ? "সম্পর্ক" : isHindi ? "रिश्ता" : "Relationship"}
                   </label>
                   <select
                     value={customRel}
                     onChange={(e) => setCustomRel(e.target.value as RelationshipType)}
                     className="w-full px-3 py-2.5 rounded-xl bg-[#1a0515] border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-primary transition-colors"
                   >
-                    <option value="partner">Partner / Love 💖</option>
-                    <option value="friend">Best Friend / Bestie 🎉</option>
-                    <option value="brother">Brother 🤜🤛</option>
-                    <option value="sister">Sister 🌸</option>
-                    <option value="mother">Mother 💐</option>
-                    <option value="father">Father 👑</option>
-                    <option value="daughter">Daughter 🌟</option>
-                    <option value="son">Son 🚀</option>
-                    <option value="family">Family Warmth 🏡</option>
-                    <option value="mentor">Mentor / Guide 🏆</option>
-                    <option value="colleague">Colleague 💼</option>
+                    <option value="partner">{isVietnamese ? "Người yêu 💖" : "Partner / Love 💖"}</option>
+                    <option value="friend">{isVietnamese ? "Bạn thân 🎉" : "Best Friend / Bestie 🎉"}</option>
+                    <option value="brother">{isVietnamese ? "Anh/Em trai 🤜🤛" : "Brother 🤜🤛"}</option>
+                    <option value="sister">{isVietnamese ? "Chị/Em gái 🌸" : "Sister 🌸"}</option>
+                    <option value="mother">{isVietnamese ? "Mẹ 💐" : "Mother 💐"}</option>
+                    <option value="father">{isVietnamese ? "Bố 👑" : "Father 👑"}</option>
+                    <option value="daughter">{isVietnamese ? "Con gái 🌟" : "Daughter 🌟"}</option>
+                    <option value="son">{isVietnamese ? "Con trai 🚀" : "Son 🚀"}</option>
+                    <option value="family">{isVietnamese ? "Gia đình 🏡" : "Family Warmth 🏡"}</option>
+                    <option value="mentor">{isVietnamese ? "Thầy cô / Người dẫn dắt 🏆" : "Mentor / Guide 🏆"}</option>
+                    <option value="colleague">{isVietnamese ? "Đồng nghiệp 💼" : "Colleague 💼"}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider text-white/70 mb-1.5">
-                    {isFrench ? "Langue" : isBengali ? "ভাষা" : isHindi ? "भाषा" : "Language"}
+                    {isVietnamese ? "Ngôn ngữ" : isFrench ? "Langue" : isBengali ? "ভাষা" : isHindi ? "भाषा" : "Language"}
                   </label>
                   <select
                     value={customLang}
                     onChange={(e) => setCustomLang(e.target.value as SupportedLanguage)}
                     className="w-full px-3 py-2.5 rounded-xl bg-[#1a0515] border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-primary transition-colors"
                   >
-                    <option value="en">English (Global)</option>
+                    <option value="en">{isVietnamese ? "Tiếng Anh" : "English (Global)"}</option>
                     <option value="bn">বাংলা (Bengali)</option>
                     <option value="hi">हिन्दी (Hindi)</option>
                     <option value="fr">Français (French)</option>
-                    <option value="vi">Tiếng Việt (Vietnamese)</option>
+                    <option value="vi">Tiếng Việt</option>
                   </select>
                 </div>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-white/70 mb-1.5">
-                  {isFrench ? "Votre Nom (Expéditeur)" : isBengali ? "আপনার নাম (শুভেচ্ছক)" : isHindi ? "आपका नाम (शुभचिंतक)" : "Your Name (Optional)"}
+                  {isVietnamese ? "Tên của bạn (không bắt buộc)" : isFrench ? "Votre Nom (Expéditeur)" : isBengali ? "আপনার নাম (শুভেচ্ছক)" : isHindi ? "आपका नाम (शुभचिंतक)" : "Your Name (Optional)"}
                 </label>
                 <input
                   type="text"
                   value={customSender}
                   onChange={(e) => setCustomSender(e.target.value)}
-                  placeholder="e.g. Alex"
+                  placeholder={isVietnamese ? "VD: Lớp 12A5" : "e.g. Alex"}
                   className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-white/30 text-sm focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
@@ -319,7 +327,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <button
               type="button"
               onClick={shareToWhatsApp}
-              aria-label="Share via WhatsApp"
+              aria-label={isVietnamese ? "Chia sẻ qua WhatsApp" : "Share via WhatsApp"}
               className="flex flex-col items-center justify-center p-3 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 transition-all hover:scale-105"
             >
               <span className="text-2xl mb-1">💬</span>
@@ -329,7 +337,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <button
               type="button"
               onClick={shareToTwitter}
-              aria-label="Share via X / Twitter"
+              aria-label={isVietnamese ? "Chia sẻ qua X / Twitter" : "Share via X / Twitter"}
               className="flex flex-col items-center justify-center p-3 rounded-2xl bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/20 text-sky-400 transition-all hover:scale-105"
             >
               <Twitter size={22} className="mb-1" />
@@ -339,7 +347,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <button
               type="button"
               onClick={shareToTelegram}
-              aria-label="Share via Telegram"
+              aria-label={isVietnamese ? "Chia sẻ qua Telegram" : "Share via Telegram"}
               className="flex flex-col items-center justify-center p-3 rounded-2xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 transition-all hover:scale-105"
             >
               <Send size={22} className="mb-1" />
@@ -349,7 +357,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <button
               type="button"
               onClick={shareToFacebook}
-              aria-label="Share via Facebook"
+              aria-label={isVietnamese ? "Chia sẻ qua Facebook" : "Share via Facebook"}
               className="flex flex-col items-center justify-center p-3 rounded-2xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-400 transition-all hover:scale-105"
             >
               <Facebook size={22} className="mb-1" />
@@ -359,7 +367,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <button
               type="button"
               onClick={shareToLinkedIn}
-              aria-label="Share via LinkedIn"
+              aria-label={isVietnamese ? "Chia sẻ qua LinkedIn" : "Share via LinkedIn"}
               className="flex flex-col items-center justify-center p-3 rounded-2xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 text-cyan-400 transition-all hover:scale-105"
             >
               <Linkedin size={22} className="mb-1" />
@@ -372,18 +380,18 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <input
               type="text"
               readOnly
-              aria-label="Celebration Share URL"
+              aria-label={isVietnamese ? "Liên kết chia sẻ" : "Celebration Share URL"}
               value={activeShareUrl}
               className="flex-1 bg-transparent px-3 text-xs text-white/80 select-all outline-none truncate font-mono"
             />
             <button
               type="button"
               onClick={handleCopyLink}
-              aria-label="Copy share link"
+              aria-label={isVietnamese ? "Sao chép liên kết" : "Copy share link"}
               className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-xs font-bold text-black transition-all hover:brightness-110 active:scale-95"
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}
-              {copied ? "Copied!" : "Copy"}
+              {copied ? (isVietnamese ? "Đã chép!" : "Copied!") : (isVietnamese ? "Sao chép" : "Copy")}
             </button>
           </div>
 
@@ -395,14 +403,14 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
               className="w-full py-3 rounded-2xl border border-white/20 bg-white/10 hover:bg-white/15 text-white text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2"
             >
               <Share2 size={16} />
-              {isFrench ? "Partager via les Applications" : isBengali ? "অন্যান্য অ্যাপে শেয়ার করুন" : isHindi ? "अन्य ऐप्स में शेयर करें" : "More Sharing Options"}
+              {isVietnamese ? "Thêm tùy chọn chia sẻ" : isFrench ? "Partager via les Applications" : isBengali ? "অন্যান্য অ্যাপে শেয়ার করুন" : isHindi ? "अन्य ऐप्स में शेयर करें" : "More Sharing Options"}
             </button>
           )}
 
           {/* Footer Branding */}
           <div className="mt-6 text-center text-[10px] text-white/40 tracking-wider uppercase flex items-center justify-center gap-1.5">
             <Heart size={10} className="text-primary fill-primary" />
-            <span>Birthday Bloom • Crafted with Love</span>
+            <span>{isVietnamese ? "Gửi tặng bằng cả tấm lòng • Lớp 12A5" : "Birthday Bloom • Crafted with Love"}</span>
             <Globe size={10} className="text-white/40" />
           </div>
         </motion.div>

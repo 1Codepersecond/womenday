@@ -17,7 +17,7 @@ export const PasswordUnlock = ({ onUnlock }: PasswordUnlockProps) => {
     const [unlocked, setUnlocked] = useState(false);
     const [localFlash, setLocalFlash] = useState(false);
     const { config } = useBirthdayStore();
-    const { t, isHindi, isBengali, isFrench } = useTranslation();
+    const { t, isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
     const { playType, playWhoosh, playReveal, playBoom } = useSoundManager();
     const { fireStars, fireConfetti } = useConfetti();
     const primaryColor = config.favoriteColor || "#FF6B6B";
@@ -62,6 +62,18 @@ export const PasswordUnlock = ({ onUnlock }: PasswordUnlockProps) => {
         if (config.passwordHint)
             return config.passwordHint;
         const format = config.passwordFormat || 'MMDD';
+        if (isVietnamese) {
+            switch (format.toUpperCase()) {
+                case 'MMDD':
+                    return "Gợi ý: Ngày đặc biệt hôm nay (định dạng MMDD, ví dụ 1020 cho ngày 20/10) 📅";
+                case 'DDMM':
+                    return "Gợi ý: Ngày đặc biệt hôm nay (định dạng DDMM, ví dụ 2010 cho ngày 20/10) 📅";
+                case 'YYYY':
+                    return "Gợi ý: Năm sinh (định dạng YYYY, ví dụ 2007) 📅";
+                default:
+                    return "Gợi ý: Ngày đặc biệt mà chúng ta đang kỉ niệm hôm nay! 💐";
+            }
+        }
         if (isFrench) {
             switch (format.toUpperCase()) {
                 case 'MMDD':

@@ -6,6 +6,7 @@ import { SPECIAL_QUOTES } from "@/config/templates";
 import { HINDI_SPECIAL_QUOTES } from "@/config/hindiTemplates";
 import { BENGALI_SPECIAL_QUOTES } from "@/config/bengaliTemplates";
 import { FRENCH_SPECIAL_QUOTES } from "@/config/frenchTemplates";
+import { VIETNAMESE_SPECIAL_QUOTES, VIETNAMESE_HEART_MESSAGES } from "@/config/vietnameseTemplates";
 import { useTranslation } from "@/i18n";
 
 interface HeartTreeProps { delay?: number; }
@@ -56,18 +57,18 @@ const HINDI_HEART_MESSAGES = [
 ];
 
 const HEART_MESSAGES = [
-    "Các bạn là một phần thật đẹp trong những kỷ niệm của lớp mình. ✨",
-    "Giữa những ngày bình thường, các bạn luôn mang đến thật nhiều niềm vui. 🌸",
-    "Mong mỗi ngày trôi qua, các bạn lại càng tự tin và rạng rỡ hơn. 🌟",
-    "Nụ cười của các bạn luôn khiến không khí lớp mình sáng bừng lên. 🌌",
-    "Cảm ơn các bạn đã góp phần làm cho 12A5 luôn ấm áp và vui vẻ. 🧡",
-    "Tình bạn đẹp là khi chúng ta luôn đồng hành và giúp đỡ nhau. 🔥",
-    "Sự tử tế của các bạn là điều đáng quý hơn các bạn nghĩ đó. 💕",
-    "Tụi mình sẽ luôn nhớ những lần các bạn âm thầm quan tâm và giúp đỡ mọi người. 💫",
-    "Mong các bạn luôn giữ nụ cười rạng rỡ và tinh thần lạc quan. 🌹",
-    "Có các bạn đồng hành là một điều may mắn của tập thể 12A5. ❤️",
-    "Chúc các bạn luôn vui vẻ, chân thành và giữ mãi tình bạn đẹp này. 🎉",
-    "Chúc các bạn có một năm cuối cấp thật trọn vẹn và đạt được nguyện vọng 1! 💖",
+    "You are the centrepiece of every memory worth keeping. ✨",
+    "In a world full of ordinary moments, you are the extraordinary one. 🌸",
+    "Every year you bloom a little brighter — and somehow that still surprises me. 🌟",
+    "Even the stars dim a little when you walk in. 🌌",
+    "Thank you for being the reason the room always feels warmer. 🧡",
+    "True friendship is having someone just as loyal and wonderful as you. 🔥",
+    "You carry kindness like a superpower, and you don't even notice. 💕",
+    "The quiet ways you show up for people — those are the chapters I remember. 💫",
+    "Your smile is the secret behind all my happiest moments. 🌹",
+    "You are proof that the best things in life are never planned. ❤️",
+    "Loud in laughter, steady in loyalty — that's you, always. 🎉",
+    "Here's to another year of you being absolutely, unapologetically you. 💖",
 ];
 
 const TreeSparks = ({ count, color }: { count: number; color: string }) => {
@@ -130,7 +131,7 @@ export const HeartTree = ({ delay = 0 }: HeartTreeProps) => {
     const { config } = useBirthdayStore();
     const { relationship, gender, photos = [] } = config;
     const validPhotos = useMemo(() => photos.filter(p => isRealImageUrl(p)), [photos]);
-    const { isHindi, isBengali, isFrench } = useTranslation();
+    const { isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
     const primaryColor = config.favoriteColor || 'hsl(330, 90%, 75%)';
     const { playPop } = useSoundManager();
 
@@ -168,11 +169,12 @@ export const HeartTree = ({ delay = 0 }: HeartTreeProps) => {
             return map.family;
         };
 
+        if (isVietnamese) return resolveFromMap(VIETNAMESE_SPECIAL_QUOTES);
         if (isFrench) return resolveFromMap(FRENCH_SPECIAL_QUOTES);
         if (isBengali) return resolveFromMap(BENGALI_SPECIAL_QUOTES);
         if (isHindi) return resolveFromMap(HINDI_SPECIAL_QUOTES);
         return resolveFromMap(SPECIAL_QUOTES);
-    }, [relationship, gender, isHindi, isBengali, isFrench]);
+    }, [relationship, gender, isHindi, isBengali, isFrench, isVietnamese]);
     useEffect(() => {
         if (!isInView) return undefined;
         const timers = [
@@ -228,7 +230,7 @@ export const HeartTree = ({ delay = 0 }: HeartTreeProps) => {
     const clickHeart = (e: React.MouseEvent<SVGGElement>, i: number) => {
         e.stopPropagation();
         if (stage < 3) return;
-        const messages = isFrench ? FRENCH_HEART_MESSAGES : isBengali ? BENGALI_HEART_MESSAGES : isHindi ? HINDI_HEART_MESSAGES : HEART_MESSAGES;
+        const messages = isVietnamese ? VIETNAMESE_HEART_MESSAGES : isFrench ? FRENCH_HEART_MESSAGES : isBengali ? BENGALI_HEART_MESSAGES : isHindi ? HINDI_HEART_MESSAGES : HEART_MESSAGES;
         const quoteFromTemplate = quotesPool.length > 0 ? quotesPool[Math.floor(i / 2) % quotesPool.length] : undefined;
         setActiveMsg(i % 2 === 0 && quoteFromTemplate ? quoteFromTemplate : (messages[i] ?? quoteFromTemplate ?? messages[0]));
         playPop();

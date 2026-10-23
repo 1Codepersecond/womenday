@@ -17,7 +17,7 @@ export const PhotoGallery = () => {
     const cachedRectRef = useRef<DOMRect | null>(null);
     const isMobile = useIsMobile();
     const { config, getAnimationPacing } = useBirthdayStore();
-    const { t, isHindi, isBengali, isFrench } = useTranslation();
+    const { t, isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
     const { relationship } = config;
     const animationPacing = getAnimationPacing();
     const reducedMotion = isReducedMotion || isMobile;
@@ -32,7 +32,7 @@ export const PhotoGallery = () => {
     const photos = useMemo(() => {
         if (validPhotos.length === 0) return [];
 
-        const captions = isFrench ? (relationship === 'partner' ? [
+        const captions = isVietnamese ? ["Những kỷ niệm đẹp của lớp 12A5 🌸", "Nụ cười rạng rỡ của tuổi học trò ✨", "Khoảnh khắc đáng nhớ bên nhau 💐"] : isFrench ? (relationship === 'partner' ? [
             "Chaque moment à tes côtés est un cadeau précieux 💖",
             "Bâtir notre merveilleux avenir ensemble ✨",
             "Le lieu préféré de mon cœur 🌹"
@@ -85,9 +85,9 @@ export const PhotoGallery = () => {
         return validPhotos.map((src, i) => ({
             src,
             key: `photo-${i}`,
-            caption: config.photoCaptions?.[i] || captions[i % captions.length] || (isFrench ? "Doux souvenir" : isBengali ? "সুন্দর স্মৃতি" : isHindi ? "खूबसूरत याद" : "Beautiful memory"),
+            caption: config.photoCaptions?.[i] || captions[i % captions.length] || (isVietnamese ? "Kỷ niệm đẹp" : isFrench ? "Doux souvenir" : isBengali ? "সুন্দর স্মৃতি" : isHindi ? "खूबसूरत याद" : "Beautiful memory"),
         }));
-    }, [validPhotos, relationship, config.photoCaptions, isHindi, isBengali, isFrench]);
+    }, [validPhotos, relationship, config.photoCaptions, isHindi, isBengali, isFrench, isVietnamese]);
 
     const x = useMotionValue(0);
     const y = useMotionValue(0);
@@ -219,7 +219,9 @@ export const PhotoGallery = () => {
                         {t('memories.title')}
                     </h2>
                     <p className="text-base sm:text-xl text-foreground/80 font-light max-w-xl mx-auto leading-relaxed mb-6">
-                        {isFrench
+                        {isVietnamese
+                            ? "Chúng mình chưa có ảnh chung ở đây, nhưng chắc chắn sẽ tạo ra thật nhiều kỷ niệm đẹp cùng nhau!"
+                            : isFrench
                             ? "Nous n'avons pas encore de photos ensemble ici, mais nous allons assurément créer d'innombrables souvenirs inoubliables !"
                             : isBengali
                             ? "আমাদের একসাথে কোনো ছবি এখনো যোগ করা হয়নি, তবে সামনে আমরা অনেক সুন্দর স্মৃতি তৈরি করব!"
@@ -229,7 +231,7 @@ export const PhotoGallery = () => {
                     </p>
                     <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-xs sm:text-sm text-white/60">
                         <Sparkles size={14} className="text-primary" />
-                        <span>{isFrench ? "De nouvelles aventures à venir ✨" : isBengali ? "সামনে আসছে দারুণ সব স্মৃতি ✨" : isHindi ? "ढेर सारी नई यादें आने वाली हैं ✨" : "Future adventures await ✨"}</span>
+                        <span>{isVietnamese ? "Còn nhiều kỷ niệm đẹp đang chờ phía trước ✨" : isFrench ? "De nouvelles aventures à venir ✨" : isBengali ? "সামনে আসছে দারুণ সব স্মৃতি ✨" : isHindi ? "ढेर सारी नई यादें आने वाली हैं ✨" : "Future adventures await ✨"}</span>
                     </div>
                 </motion.div>
             </section>

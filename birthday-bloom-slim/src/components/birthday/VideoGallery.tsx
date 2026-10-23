@@ -8,7 +8,7 @@ import { isValidVideoUrl } from "@/utils/mediaUtils";
 
 export const VideoGallery = () => {
     const { config } = useBirthdayStore();
-    const { isHindi, isBengali, isFrench } = useTranslation();
+    const { isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
     const isMobile = useIsMobile();
     const rawVideos = config.videos || [];
     const validVideos = rawVideos.filter(isValidVideoUrl);
@@ -35,38 +35,46 @@ export const VideoGallery = () => {
                 <h2
                     className="font-display text-4xl sm:text-6xl md:text-7xl font-black drop-shadow-xl mb-4 bg-gradient-to-r from-primary via-white to-accent bg-clip-text text-transparent"
                 >
-                    {isFrench
+                    {isVietnamese
+                        ? "KỶ NIỆM ĐÁNG NHỚ 🎬"
+                        : isFrench
                         ? "SOUVENIRS VIDÉO SPÉCIAUX 🎬"
                         : isBengali
                             ? "বিশেষ ভিডিও স্মৃতি 🎬"
                             : isHindi
                                 ? "खास वीडियो यादें 🎬"
-                                : "KỶ NIỆM ĐÁNG NHỚ 🎬"}
+                                : "SPECIAL MEMORIES 🎬"}
                 </h2>
                 <p className="font-display italic text-lg sm:text-xl md:text-2xl text-foreground/70 max-w-2xl mx-auto">
                     {relationship === "partner"
-                        ? isFrench
+                        ? isVietnamese
+                            ? "“Mỗi giây bên bạn đều như một cảnh phim đẹp nhất.”"
+                            : isFrench
                             ? "« Chaque seconde passée avec toi ressemble à la plus belle des scènes de film. »"
                             : isBengali
                                 ? "“আপনার সাথে কাটানো প্রতিটি মুহূর্ত যেন এক সুন্দর সিনেমার দৃশ্যের মতো।”"
                                 : isHindi
                                     ? "“आपके साथ बिताया हर एक पल किसी खूबसूरत फिल्म के दृश्य जैसा है।”"
-                                    : '"Mỗi khoảnh khắc bên nhau đều trở thành một thước phim thật đẹp."'
+                                    : '"Every second spent with you feels like the most beautiful movie scene."'
                         : relationship === "friend"
-                            ? isFrench
+                            ? isVietnamese
+                                ? "“Gửi đến tất cả những trò nghịch ngợm và tiếng cười khó quên!”"
+                                : isFrench
                                 ? "« Pour toutes les aventures folles et les rires inoubliables ! »"
                                 : isBengali
                                     ? "“সব পাগলামি ভরা রোমাঞ্চ আর অট্টহাসির স্মৃতির নামে!”"
                                     : isHindi
                                         ? "“उन सभी पागलपन भरे कारनामों और हंसी के ठहाकों के नाम!”"
-                                        : '"Gửi đến những trải nghiệm đáng nhớ và những tiếng cười không thể quên!"'
-                            : isFrench
+                                        : '"To all the wild adventures and unforgettable laughter!"'
+                            : isVietnamese
+                                ? "“Những khoảnh khắc bên gia đình là kho báu quý giá nhất.”"
+                                : isFrench
                                 ? "« Les moments partagés en famille sont les plus précieux des trésors. »"
                                 : isBengali
                                     ? "“পরিবারের সাথে ভাগ করে নেওয়া মুহূর্তগুলোই জীবনের সেরা সম্পদ।”"
                                     : isHindi
                                         ? "“परिवार के साथ साझा किए गए लम्हें ही जीवन की सबसे अनमोल धरोहर हैं।”"
-                                        : '"Những khoảnh khắc cùng tập thể lớp luôn là món quà quý giá nhất."'}
+                                        : '"Moments shared with family are the most precious treasures of all."'}
                 </p>
             </motion.div>
 
@@ -146,7 +154,9 @@ export const VideoGallery = () => {
                         className="font-script text-3xl sm:text-5xl font-bold italic mb-6 text-gradient-romantic text-glow-rose leading-tight"
                     >
                         {relationship === "partner"
-                            ? isFrench
+                            ? isVietnamese
+                                ? "Cùng tạo nên những kỷ niệm đẹp nhất ✨"
+                                : isFrench
                                 ? "Créons ensemble nos plus beaux souvenirs ✨"
                                 : isBengali
                                     ? "চলুন একসাথে তৈরি করি আমাদের সুন্দর সব স্মৃতি ✨"
@@ -154,14 +164,18 @@ export const VideoGallery = () => {
                                         ? "चलिए मिलकर बनाते हैं अपनी सबसे खूबसूरत यादें ✨"
                                         : "Waiting to Create Countless Memories With You ✨"
                             : relationship === "friend"
-                                ? isFrench
+                                ? isVietnamese
+                                ? "Sẵn sàng cho những kỷ niệm tiếp theo chưa? 🔥"
+                                : isFrench
                                 ? "Prêt(e) pour nos prochaines aventures légendaires ? 🔥"
                                 : isBengali
                                     ? "চল দোস্ত, সামনে আরও বড় ধামাকা স্মৃতি তৈরি করব! 🔥"
                                     : isHindi
                                         ? "चलो यार, आगे और भी धमाकेदार यादें बनाएंगे! 🔥"
                                         : "Ready For Our Next Legendary Memories? 🔥"
-                                : isFrench
+                                : isVietnamese
+                                    ? "Còn nhiều kỷ niệm quý giá đang chờ phía trước 🌟"
+                                    : isFrench
                                     ? "De précieux souvenirs sont encore à venir 🌟"
                                     : isBengali
                                         ? "সামনে আরও অনেক সুন্দর স্মৃতি তৈরি করার অপেক্ষায় 🌟"
@@ -172,7 +186,9 @@ export const VideoGallery = () => {
 
                     <p className="font-display font-light text-lg sm:text-2xl text-white/85 max-w-xl mx-auto leading-relaxed mb-8">
                         {relationship === "partner"
-                            ? isFrench
+                            ? isVietnamese
+                                ? "Chúng mình chưa có nhiều video, nhưng sẽ còn rất nhiều khoảnh khắc đẹp phía trước! 💖"
+                                : isFrench
                                 ? "Nous n'avons pas encore enregistré toutes nos vidéos... mais mon cœur a hâte de vivre et capturer une infinité d'instants magiques avec toi ! 💖"
                                 : isBengali
                                     ? "আমাদের সব ভিডিও স্মৃতি হয়তো এখনও ক্যামেরায় বন্দি হয়নি... কিন্তু আপনার সাথে প্রতিটি মুহূর্ত সিনেমার মতো সুন্দর করে সাজানোর অপেক্ষায় আছি! 💖"
@@ -180,14 +196,18 @@ export const VideoGallery = () => {
                                         ? "हमारी सारी वीडियो यादें भले ही अभी रिकॉर्ड नहीं हुईं... पर आपके साथ ज़िंदगी का हर खूबसूरत पल जीने और नई यादें बनाने का इंतज़ार है! 💖"
                                         : "We haven't recorded all our video clips yet... but my heart is waiting for a lifetime of beautiful adventures and movie scenes with you! 💖"
                             : relationship === "friend"
-                                ? isFrench
+                                ? isVietnamese
+                                    ? "Chưa có video nào được thêm vào... nhưng chúng ta sẽ sớm có thật nhiều kỷ niệm vui! 🎉"
+                                    : isFrench
                                     ? "Pas encore de vidéos importées... mais viens, on va bientôt créer des souvenirs complètement fous et inoubliables ! 🎉🍻"
                                     : isBengali
                                         ? "এখনও কোনো ভিডিও ক্লিপ যুক্ত হয়নি... কিন্তু চল শীঘ্রই দারুণ কিছু পাগলামি আর স্মরণীয় স্মৃতি তৈরি করা যাক! 🎉🍻"
                                         : isHindi
                                             ? "अभी कोई वीडियो क्लिप नहीं जुड़ी... पर चलो जल्द ही कुछ धमाकेदार और यादगार यादें बनाते हैं! 🎉🍻"
                                             : "No wild video clips uploaded yet... but come on, let's create some chaotic, unforgettable memories together soon! 🎉🍻"
-                                : isFrench
+                                : isVietnamese
+                                    ? "Mỗi khoảnh khắc bên nhau đều là một niềm hạnh phúc. Mong sẽ có thêm nhiều kỷ niệm đẹp! 🌟"
+                                    : isFrench
                                     ? "Chaque instant partagé en famille est une bénédiction. Hâte de capturer encore plus de magnifiques souvenirs ensemble ! 🌟"
                                     : isBengali
                                         ? "পরিবারের সাথে কাটানো প্রতিটি মুহূর্ত ঈশ্বরের আশীর্বাদ। একসাথে আরও অনেক সুন্দর ও মধুর স্মৃতি তৈরির অপেক্ষায় রইলাম! 🌟"
@@ -199,7 +219,9 @@ export const VideoGallery = () => {
                     <div className="inline-flex items-center gap-3 px-8 py-3.5 rounded-full border border-white/20 bg-white/10 text-white/90 text-sm sm:text-base font-medium shadow-lg backdrop-blur-xl">
                         <Video size={18} className="text-primary animate-pulse" />
                         <span>
-                            {isFrench
+                            {isVietnamese
+                                ? "Câu chuyện của chúng mình mới bắt đầu 🎬"
+                                : isFrench
                                 ? "Nos Mémoires en Cours d'Écriture 🎬"
                                 : isBengali
                                     ? "স্মৃতি তৈরির এক নতুন সূচনা 🎬"

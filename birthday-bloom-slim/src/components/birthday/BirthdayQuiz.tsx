@@ -15,14 +15,61 @@ export const BirthdayQuiz = () => {
     const { config } = useBirthdayStore();
     const { playPop, playReveal, playBoom } = useSoundManager();
     const { fireCannon, fireStars } = useConfetti();
-    const { isHindi, isBengali, isFrench } = useTranslation();
+    const { isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
     const [currentIdx, setCurrentIdx] = useState(0);
     const [score, setScore] = useState(0);
     const [showResult, setShowResult] = useState(false);
     const [selected, setSelected] = useState<number | null>(null);
     const questions: Question[] = useMemo(() => {
         const { name, interests, relationship } = config;
-        const displayName = name || (isFrench ? "Notre Star du Jour" : isBengali ? "আমাদের বার্থডে স্টার" : isHindi ? "हमारे बर्थडे स्टार" : "Birthday Star");
+        const displayName = name || (isVietnamese ? "Nhân vật chính của chúng ta" : isFrench ? "Notre Star du Jour" : isBengali ? "আমাদের বার্থডে স্টার" : isHindi ? "हमारे बर्थडे स्टार" : "Birthday Star");
+        if (isVietnamese) {
+            const base: Question[] = [
+                {
+                    q: `Ai chắc chắn là người tuyệt vời nhất trong ngày hôm nay?`,
+                    options: ["Albert Einstein", "Một người nổi tiếng", displayName, "Một chú chim cánh cụt"],
+                    correct: 2,
+                    reason: `Tất nhiên rồi! Không ai khác ngoài ${displayName}!`
+                },
+                {
+                    q: `Tâm trạng của ${displayName} hôm nay thế nào?`,
+                    options: ["Buồn ngủ", "Đói bụng", "Rạng rỡ & Không thể cản phá 🔥", "Chán nản"],
+                    correct: 2,
+                    reason: "Hôm nay là ngày của các bạn mà, đương nhiên là tỏa sáng rồi!"
+                }
+            ];
+            if (interests?.includes('car')) {
+                base.push({
+                    q: `Nếu ${displayName} được lái bất cứ thứ gì hôm nay, đó sẽ là:`,
+                    options: ["Xe ba bánh", "Một chiếc siêu xe 🏎️", "Xe buýt", "Xe trượt scooter"],
+                    correct: 1,
+                    reason: "Vì người tuyệt vời thì luôn thích tốc độ!"
+                });
+            }
+            if (relationship === 'partner') {
+                base.push({
+                    q: `Ai yêu ${displayName} nhất trên đời?`,
+                    options: ["Chú mèo", "Hàng xóm", "Người đã gửi món quà này ❤️", "Người ngoài hành tinh"],
+                    correct: 2,
+                    reason: "Người gửi quà này yêu bạn đến tận cùng vũ trụ!"
+                });
+            }
+            if (interests?.includes('coding')) {
+                base.push({
+                    q: `Điều ${displayName} sợ nhất là gì?`,
+                    options: ["Nhện", "Độ cao", "Lỗi code lúc 5 giờ chiều thứ Sáu 🐞", "Hết cà phê"],
+                    correct: 2,
+                    reason: "Lập trình viên thật sự mới hiểu nỗi đau này!"
+                });
+            }
+            base.push({
+                q: `Nếu ${displayName} là siêu anh hùng, tên của họ sẽ là:`,
+                options: ["Đội trưởng Ngủ Nướng", "Người Trì Hoãn", "Siêu Sao Sinh Nhật 🦸‍♂️", "Người Sắt Cà Phê"],
+                correct: 2,
+                reason: "Hôm nay là ngày của siêu anh hùng mà thế giới đang cần!"
+            });
+            return base;
+        }
         if (isFrench) {
             const base: Question[] = [
                 {
@@ -209,7 +256,7 @@ export const BirthdayQuiz = () => {
             reason: "Today, they are the hero this world needs!"
         });
         return base;
-    }, [config, isHindi, isBengali, isFrench]);
+    }, [config, isHindi, isBengali, isFrench, isVietnamese]);
     const handleSelect = (index: number) => {
         if (selected !== null)
             return;
@@ -231,14 +278,14 @@ export const BirthdayQuiz = () => {
             }
         }, 2200);
     };
-    return (<section className="relative z-20 px-4 py-20 max-w-4xl mx-auto" aria-label="Birthday Celebration Trivia Quiz">
-      <h2 className="sr-only">Birthday Celebration Trivia Quiz</h2>
+    return (<section className="relative z-20 px-4 py-20 max-w-4xl mx-auto" aria-label={isVietnamese ? "Câu đố vui 20/10" : "Birthday Celebration Trivia Quiz"}>
+      <h2 className="sr-only">{isVietnamese ? "Câu đố vui 20/10" : "Birthday Celebration Trivia Quiz"}</h2>
       <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="p-8 md:p-12 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-2xl shadow-2xl text-center">
         {!showResult ? (<AnimatePresence mode="wait">
             <motion.div key={currentIdx} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
               <div className="flex justify-between items-center text-sm font-bold tracking-widest text-primary uppercase">
-                <span>{isFrench ? `Question ${currentIdx + 1} / ${questions.length}` : isBengali ? `প্রশ্ন ${currentIdx + 1} / ${questions.length}` : isHindi ? `प्रश्न ${currentIdx + 1} / ${questions.length}` : `Question ${currentIdx + 1} of ${questions.length}`}</span>
-                <span>{isFrench ? `Score : ${score}` : isBengali ? `স্কোর: ${score}` : isHindi ? `स्कोर: ${score}` : `Score: ${score}`}</span>
+                <span>{isVietnamese ? `Câu ${currentIdx + 1} / ${questions.length}` : isFrench ? `Question ${currentIdx + 1} / ${questions.length}` : isBengali ? `প্রশ্ন ${currentIdx + 1} / ${questions.length}` : isHindi ? `प्रश्न ${currentIdx + 1} / ${questions.length}` : `Question ${currentIdx + 1} of ${questions.length}`}</span>
+                <span>{isVietnamese ? `Điểm: ${score}` : isFrench ? `Score : ${score}` : isBengali ? `স্কোর: ${score}` : isHindi ? `स्कोर: ${score}` : `Score: ${score}`}</span>
               </div>
 
               <h3 className="font-display text-2xl md:text-4xl font-bold leading-tight min-h-[4rem] flex items-center justify-center">
@@ -278,11 +325,11 @@ export const BirthdayQuiz = () => {
               </div>
             </div>
             
-            <h2 className="font-display text-4xl md:text-6xl font-black">{isFrench ? "SCORE LÉGENDAIRE ! 🏆" : isBengali ? "অসাধারণ স্কোর! 🏆" : isHindi ? "धमाकेदार स्कोर! 🏆" : "LEGENDARY SCORE!"}</h2>
+            <h2 className="font-display text-4xl md:text-6xl font-black">{isVietnamese ? "ĐIỂM SỐ HUYỀN THOẠI! 🏆" : isFrench ? "SCORE LÉGENDAIRE ! 🏆" : isBengali ? "অসাধারণ স্কোর! 🏆" : isHindi ? "धमाकेदार स्कोर! 🏆" : "LEGENDARY SCORE!"}</h2>
             <p className="text-2xl md:text-3xl text-foreground/80">
-              {isFrench ? `Vous avez obtenu ` : isBengali ? `আপনি ${config.name || 'বার্থডে'} কুইজে ` : isHindi ? `आपने ${config.name || 'बर्थडे'} क्विज़ में ` : 'You scored '}
+              {isVietnamese ? `Bạn đã đạt ` : isFrench ? `Vous avez obtenu ` : isBengali ? `আপনি ${config.name || 'বার্থডে'} কুইজে ` : isHindi ? `आपने ${config.name || 'बर्थडे'} क्विज़ में ` : 'You scored '}
               <span className="text-primary font-black">{score}/{questions.length}</span>
-              {isFrench ? ` au Quiz de ${config.name || 'Anniversaire'} !` : isBengali ? ' নম্বর পেয়েছেন!' : isHindi ? ' अंक हासिल किए!' : ` on the ${config.name || 'Birthday'} Trivia!`}
+              {isVietnamese ? ` điểm trong câu đố ${config.name || 'sinh nhật'}!` : isFrench ? ` au Quiz de ${config.name || 'Anniversaire'} !` : isBengali ? ' নম্বর পেয়েছেন!' : isHindi ? ' अंक हासिल किए!' : ` on the ${config.name || 'Birthday'} Trivia!`}
             </p>
             
             <div className="flex justify-center gap-4 text-primary">
@@ -299,7 +346,7 @@ export const BirthdayQuiz = () => {
                 setSelected(null);
                 fireStars();
             }} className="px-10 py-4 bg-primary text-white rounded-full font-black tracking-widest uppercase text-sm shadow-2xl shadow-primary/30">
-              {isFrench ? "Rejouer 🔄" : isBengali ? "আবার খেলুন 🔄" : isHindi ? "फिर से खेलें 🔄" : "Play Again 🔄"}
+              {isVietnamese ? "Chơi lại 🔄" : isFrench ? "Rejouer 🔄" : isBengali ? "আবার খেলুন 🔄" : isHindi ? "फिर से खेलें 🔄" : "Play Again 🔄"}
             </motion.button>
           </motion.div>)}
       </motion.div>

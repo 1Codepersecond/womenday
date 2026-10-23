@@ -2,6 +2,7 @@ import { EMOTIONAL_LETTERS } from '@/config/templates';
 import { HINDI_EMOTIONAL_LETTERS, HINDI_BIG_WISHES } from '@/config/hindiTemplates';
 import { BENGALI_EMOTIONAL_LETTERS, BENGALI_BIG_WISHES } from '@/config/bengaliTemplates';
 import { FRENCH_EMOTIONAL_LETTERS, FRENCH_BIG_WISHES } from '@/config/frenchTemplates';
+import { VIETNAMESE_BIG_WISHES, VIETNAMESE_FALLBACK_LETTER } from '@/config/vietnameseTemplates';
 import { RelationshipType, GenderType } from './useBirthdayStore';
 
 export const getHighlySpecificLetter = (
@@ -17,10 +18,13 @@ export const getHighlySpecificLetter = (
     const isFrench = language === 'fr' || language === 'french' || language === 'francais' || language === 'française' || language === 'francaise';
     const isHindi = language === 'hi' || language === 'hindi' || language === 'in';
     const isBengali = language === 'bn' || language === 'bengali' || language === 'bangla';
+    const isVietnamese = language === 'vi' || language === 'vietnamese' || language === 'tiengviet';
 
     let letter = '';
 
-    if (isFrench) {
+    if (isVietnamese) {
+        letter = VIETNAMESE_FALLBACK_LETTER(name);
+    } else if (isFrench) {
         if (relationship === 'partner') {
             letter = isFemale ? FRENCH_EMOTIONAL_LETTERS.partner.female(name) : FRENCH_EMOTIONAL_LETTERS.partner.male(name);
         } else if (relationship === 'friend') {
@@ -186,6 +190,7 @@ export const getHighlySpecificLetter = (
     return letter
         .replace(/\[Your Name\]/g, cleanSender)
         .replace(/\[Votre Nom\]/g, cleanSender)
+        .replace(/\[Tên Của Bạn\]/g, cleanSender)
         .replace(/\[आपका नाम\]/g, cleanSender)
         .replace(/\[আপনার নাম\]/g, cleanSender)
         .trimEnd();
@@ -198,6 +203,11 @@ export const getBigWishes = (
     interests: string[] = [],
     language: string = 'en'
 ) => {
+    const isVietnamese = language === 'vi' || language === 'vietnamese' || language === 'tiengviet';
+    if (isVietnamese) {
+        return VIETNAMESE_BIG_WISHES(name, relationship, interests);
+    }
+
     const isFrench = language === 'fr' || language === 'french' || language === 'francais' || language === 'française' || language === 'francaise';
     if (isFrench) {
         return FRENCH_BIG_WISHES(name, relationship, interests);
