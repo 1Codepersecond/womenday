@@ -380,7 +380,7 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 return [
                     `Gửi *${name || 'các bạn nữ'}* 💐`,
                     "Chúc các bạn luôn *xinh đẹp, vui vẻ và thật nhiều niềm tin*!",
-                    "Cảm ơn các bạn đã *đồng hành cùng lớp mình* suốt thời gian qua 🌸",
+                    "Cảm ơn các bạn đã *đồng hành cùng chúng mình* suốt thời gian qua 🌸",
                     "Chúc mừng ngày Phụ nữ Việt Nam 20/10! ✨"
                 ];
             return [

@@ -341,6 +341,10 @@ export const MainBirthday = () => {
         <p className="mt-2 text-white/10 text-[10px] tracking-[0.3em] uppercase">
           {isVietnamese ? "Chúc mừng 20/10 ✨" : "Birthday Bloom ✨"}
         </p>
+        <p className="mt-3 text-white/30 text-xs tracking-[0.15em]">
+          {isVietnamese ? "Design và deploy by" : "Design & deploy by"}{' '}
+          <span className="text-white/50 font-semibold">hunogo</span>
+        </p>
       </footer>
 
       
