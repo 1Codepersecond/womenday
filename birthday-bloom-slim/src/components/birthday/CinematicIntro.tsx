@@ -134,11 +134,10 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
             }
             if (relationship === 'friend') {
                 return [
-                    "Thông báo khẩn: hôm nay là ngày của *những cô gái tuyệt vời nhất lớp*! 🌸",
+                    "Hôm nay là ngày của *những cô gái tuyệt vời nhất lớp*! 🌸",
                     "Ngày 20/10 đến rồi, và tụi mình thì... *hơi trễ một chút* 😅",
                     "Gửi đến những bạn nữ đã *cùng cả lớp đi qua bao buổi học, bao tiếng cười*...",
-                    "Tụi mình đã định mua một món quà thật bình thường...",
-                    "Nhưng rồi nghĩ lại, các bạn xứng đáng có *một điều gì đó đặc biệt hơn* 💐"
+                    "Các bạn xứng đáng có *một điều gì đó đặc biệt hơn* 💐"
                 ];
             }
             return [
@@ -542,7 +541,7 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
         if (scene === "envelope-letter") {
             addTimer(() => {
                 setScene("special-message");
-            }, 14000 * speedMultiplier);
+            }, 30000 * speedMultiplier);
         }
 
         if (scene === "special-message") {

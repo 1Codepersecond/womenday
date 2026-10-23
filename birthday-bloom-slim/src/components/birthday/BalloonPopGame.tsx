@@ -175,7 +175,7 @@ export const BalloonPopGame = () => {
                     <PartyPopper size={20} className="text-primary animate-bounce" />
                     <span>
                         {isVietnamese
-                            ? "Cùng nổ bóng bay nào! 🎈"
+                            ? "Nhấn vào bóng bay đi :)) 🎈"
                             : isFrench
                             ? "Éclatez les ballons ! 🎈"
                             : isBengali
@@ -293,7 +293,7 @@ export const BalloonPopGame = () => {
                         <RotateCcw size={16} />
                         <span>
                             {isVietnamese
-                                ? "Chơi lại 🎈"
+                                ? "Nhấn lại? 🎈"
                                 : isFrench
                                 ? "Rejouer 🎈"
                                 : isBengali

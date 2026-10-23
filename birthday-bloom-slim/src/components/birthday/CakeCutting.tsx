@@ -109,7 +109,7 @@ export const CakeCutting = () => {
             ];
 
             if (relationship === 'friend') return [
-                { text: `Gửi ${name || 'các bạn nữ'} thân yêu!`, animation: "pop-out" as const },
+                { text: `Gửi ${name || 'các bạn nữ'} !`, animation: "pop-out" as const },
                 { text: signatureTemplateQuote || t('cake.readyGetOlder'), animation: "zoom-in" as const },
                 { text: t('cake.zeroHangovers'), animation: "stagger-up" as const },
                 { text: t('cake.happyBirthdayBestie'), animation: "typewriter-burst" as const },

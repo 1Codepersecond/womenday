@@ -144,7 +144,7 @@ export const FakeChatScene = ({ onComplete }: FakeChatSceneProps) => {
             if (relationship === "partner")
                 return isMale ? "Gửi người đàn ông làm tim mình rung động... ❤️" : isFemale ? "Gửi người con gái trong mơ của mình... ❤️" : "Gửi người làm cho mình trọn vẹn... ❤️";
             if (relationship === "friend")
-                return "Khoan đã, chỉ một tin nhắn thôi á? Không phải phong cách của tụi mình! 😂🌸";
+                return "Khoan, chỉ chúc có một câu thôi hả! 😂🌸";
             if (relationship === "brother" || relationship === "sibling")
                 return "Chỉ một tin nhắn cho người anh tuyệt nhất? Không đời nào! 🏆";
             if (relationship === "sister")

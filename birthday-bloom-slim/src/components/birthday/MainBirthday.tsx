@@ -13,7 +13,7 @@ import { HeartTree } from "./HeartTree";
 import { BirthdayQuiz } from "./BirthdayQuiz";
 import { FinalSurprise } from "./FinalSurprise";
 import { VideoGallery } from "./VideoGallery";
-import { ShareCelebrationModal } from "./ShareCelebrationModal";
+
 import { useBirthdayStore } from "@/features/core/store/useBirthdayStore";
 import { useTranslation } from "@/i18n";
 import { Car, Trophy } from "lucide-react";
@@ -33,7 +33,7 @@ export const MainBirthday = () => {
     const [cakeClicks, setCakeClicks] = useState(0);
     const [megaSurprise, setMegaSurprise] = useState(false);
     const [giftStage, setGiftStage] = useState<'closed' | 'party' | 'open'>('closed');
-    const [shareOpen, setShareOpen] = useState(false);
+    
     const giftTimerRef = useRef<number | null>(null);
     const { fireConfetti, fireCannon, fireStars } = useConfetti();
     const { playReveal, playPop, playBoom, setBgVolume } = useSoundManager();
@@ -323,21 +323,7 @@ export const MainBirthday = () => {
       </AnimatePresence>
 
       
-      {/* Interactive Celebration Buttons */}
-      <section className="relative z-20 flex flex-wrap justify-center gap-4 sm:gap-6 px-4 pb-32">
-        {[
-            { label: isVietnamese ? "🎊 Pháo hoa!" : isFrench ? "🎊 Canon !" : isBengali ? "🎊 কামান!" : isHindi ? "🎊 तोप!" : "🎊 Cannon!", color: primaryColor, action: fireCannon },
-            { label: isVietnamese ? "🎈 Tiệc vui!" : isFrench ? "🎈 Fête !" : isBengali ? "🎈 পার্টি!" : isHindi ? "🎈 पार्टी!" : "🎈 Party!", color: "hsl(45, 100%, 50%)", action: fireConfetti },
-            { label: isVietnamese ? "💫 Yêu thương!" : isFrench ? "💫 Amour !" : isBengali ? "💫 ভালোবাসা!" : isHindi ? "💫 प्यार!" : "💫 Love!", color: "hsl(200, 80%, 50%)", action: () => { for (let i = 0; i < 5; i++)
-                    setTimeout(addEmoji, i * 200); } },
-            { label: isVietnamese ? "💌 Chia sẻ!" : isFrench ? "💌 Partager !" : isBengali ? "💌 শেয়ার!" : isHindi ? "💌 शेयर!" : "💌 Share!", color: "hsl(320, 85%, 55%)", action: () => setShareOpen(true) }
-        ].map((btn, i) => (<motion.button key={i} whileHover={shouldAnimate ? { scale: 1.08, y: -4 } : undefined} whileTap={{ scale: 0.94 }} onClick={() => { btn.action(); addEmoji(); }} className="px-8 sm:px-12 py-4 sm:py-6 rounded-full text-lg sm:text-2xl font-black text-white shadow-2xl transition-all border border-white/20 backdrop-blur-xl" style={{
-                background: `linear-gradient(135deg, ${btn.color}cc, ${btn.color}88)`,
-                boxShadow: `0 15px 40px -10px ${btn.color}50, inset 0 1px 0 rgba(255,255,255,0.4)`
-            }}>
-            {btn.label}
-          </motion.button>))}
-      </section>
+      
 
       {config.showHeartTreeSection && <HeartTree delay={500}/>}
       
@@ -349,7 +335,7 @@ export const MainBirthday = () => {
 
       <footer className="relative z-20 text-center py-20 bg-gradient-to-t from-black/60 to-transparent w-full">
         <p className="text-white/30 text-sm tracking-[0.15em]">
-          {isVietnamese ? "Với tình cảm từ" : isFrench ? "Avec amour de" : isBengali ? "ভালোবাসায়" : isHindi ? "प्यार से" : "With love from"}{' '}
+          {isVietnamese ? "Đến từ" : isFrench ? "Avec amour de" : isBengali ? "ভালোবাসায়" : isHindi ? "प्यार से" : "With love from"}{' '}
           <span className="text-white/50 font-semibold">{senderName || (isVietnamese ? 'Một người đặc biệt' : 'Someone Special')}</span>
         </p>
         <p className="mt-2 text-white/10 text-[10px] tracking-[0.3em] uppercase">
@@ -357,6 +343,6 @@ export const MainBirthday = () => {
         </p>
       </footer>
 
-      <ShareCelebrationModal isOpen={shareOpen} onClose={() => setShareOpen(false)} />
+      
     </div>);
 };

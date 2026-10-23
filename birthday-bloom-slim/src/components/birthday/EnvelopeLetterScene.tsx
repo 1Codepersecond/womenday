@@ -258,7 +258,7 @@ export const EnvelopeLetterScene = ({
                             </span>
                             <h3 className="font-display italic text-2xl sm:text-3xl text-white font-bold tracking-wide mt-2 drop-shadow-lg">
                                 {isVietnamese
-                                    ? "Trong lúc đó, có một món quà nhỏ 💌"
+                                    ? "💌"
                                     : isFrench
                                     ? "Pendant ce temps, la surprise 😭💌"
                                     : isBengali
