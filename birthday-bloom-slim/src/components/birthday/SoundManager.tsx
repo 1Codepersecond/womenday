@@ -35,18 +35,17 @@ class AudioManager {
             this.bgMusic.loop = true;
             this.bgMusic.volume = this.muted ? 0 : BGM_VOLUME;
             this.bgMusic.play().catch(() => {
+            // Điện thoại chặn tự phát: chờ lần chạm hoàn tất (click/touchend/pointerup)
+                const events = ['click', 'touchend', 'pointerup', 'keydown'];
                 const playOnInteraction = () => {
-                    this.bgMusic?.play().catch(() => {});
-                    ['click', 'touchstart', 'pointerdown', 'keydown'].forEach((evt) => {
-                        document.removeEventListener(evt, playOnInteraction);
-                    });
+                    this.bgMusic?.play().then(() => {
+                    // Chỉ gỡ lắng nghe khi nhạc đã chạy thành công
+                        events.forEach((evt) => document.removeEventListener(evt, playOnInteraction));
+                    }).catch(() => {});
                 };
-                ['click', 'touchstart', 'pointerdown', 'keydown'].forEach((evt) => {
-                    document.addEventListener(evt, playOnInteraction, { passive: true });
-                });
+                events.forEach((evt) => document.addEventListener(evt, playOnInteraction, { passive: true }));
             });
-        }
-        catch (e) {
+        } catch (e) {
             console.debug("Autoplay failed or blocked:", e);
         }
     }
