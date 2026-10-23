@@ -8,7 +8,7 @@ import {
 } from "framer-motion";
 import { useBirthdayStore } from "@/features/core/store/useBirthdayStore";
 import { useTranslation } from "@/i18n";
-import { getWishDeck, WRITE_YOUR_OWN_CARD, type WishTemplate } from "@/config/wishTemplates";
+import { getWishDeck, type WishTemplate } from "@/config/wishTemplates";
 import { Heart, X, Send, Pencil, RotateCcw } from "lucide-react";
 
 /* ──────────────────────────────────────────────
@@ -233,7 +233,7 @@ export const WishDeck = () => {
     // Build the deck once per relationship/name combo
     const deck = useMemo(() => {
         const templates = getWishDeck(relationship, name, isVietnamese ? 'vi' : 'en');
-        return [...templates, { ...WRITE_YOUR_OWN_CARD, text: "" }];
+        return [...templates];
     }, [relationship, name, isVietnamese]);
 
     // Random rotations for each card in the deck (pre-computed for stability)
