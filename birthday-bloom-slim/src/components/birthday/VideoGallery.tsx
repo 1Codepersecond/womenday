@@ -41,7 +41,7 @@ export const VideoGallery = () => {
                             ? "বিশেষ ভিডিও স্মৃতি 🎬"
                             : isHindi
                                 ? "खास वीडियो यादें 🎬"
-                                : "SPECIAL MEMORIES 🎬"}
+                                : "KỶ NIỆM ĐÁNG NHỚ 🎬"}
                 </h2>
                 <p className="font-display italic text-lg sm:text-xl md:text-2xl text-foreground/70 max-w-2xl mx-auto">
                     {relationship === "partner"
@@ -51,7 +51,7 @@ export const VideoGallery = () => {
                                 ? "“আপনার সাথে কাটানো প্রতিটি মুহূর্ত যেন এক সুন্দর সিনেমার দৃশ্যের মতো।”"
                                 : isHindi
                                     ? "“आपके साथ बिताया हर एक पल किसी खूबसूरत फिल्म के दृश्य जैसा है।”"
-                                    : '"Every second spent with you feels like the most beautiful movie scene."'
+                                    : '"Mỗi khoảnh khắc bên nhau đều trở thành một thước phim thật đẹp."'
                         : relationship === "friend"
                             ? isFrench
                                 ? "« Pour toutes les aventures folles et les rires inoubliables ! »"
@@ -59,14 +59,14 @@ export const VideoGallery = () => {
                                     ? "“সব পাগলামি ভরা রোমাঞ্চ আর অট্টহাসির স্মৃতির নামে!”"
                                     : isHindi
                                         ? "“उन सभी पागलपन भरे कारनामों और हंसी के ठहाकों के नाम!”"
-                                        : '"To all the wild adventures and unforgettable laughter!"'
+                                        : '"Gửi đến những trải nghiệm đáng nhớ và những tiếng cười không thể quên!"'
                             : isFrench
                                 ? "« Les moments partagés en famille sont les plus précieux des trésors. »"
                                 : isBengali
                                     ? "“পরিবারের সাথে ভাগ করে নেওয়া মুহূর্তগুলোই জীবনের সেরা সম্পদ।”"
                                     : isHindi
                                         ? "“परिवार के साथ साझा किए गए लम्हें ही जीवन की सबसे अनमोल धरोहर हैं।”"
-                                        : '"Moments shared with family are the most precious treasures of all."'}
+                                        : '"Những khoảnh khắc cùng tập thể lớp luôn là món quà quý giá nhất."'}
                 </p>
             </motion.div>
 

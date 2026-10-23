@@ -56,18 +56,18 @@ const HINDI_HEART_MESSAGES = [
 ];
 
 const HEART_MESSAGES = [
-    "You are the centrepiece of every memory worth keeping. ✨",
-    "In a world full of ordinary moments, you are the extraordinary one. 🌸",
-    "Every year you bloom a little brighter — and somehow that still surprises me. 🌟",
-    "Even the stars dim a little when you walk in. 🌌",
-    "Thank you for being the reason the room always feels warmer. 🧡",
-    "True friendship is having someone just as loyal and wonderful as you. 🔥",
-    "You carry kindness like a superpower, and you don't even notice. 💕",
-    "The quiet ways you show up for people — those are the chapters I remember. 💫",
-    "Your smile is the secret behind all my happiest moments. 🌹",
-    "You are proof that the best things in life are never planned. ❤️",
-    "Loud in laughter, steady in loyalty — that's you, always. 🎉",
-    "Here's to another year of you being absolutely, unapologetically you. 💖",
+    "Các bạn là một phần thật đẹp trong những kỷ niệm của lớp mình. ✨",
+    "Giữa những ngày bình thường, các bạn luôn mang đến thật nhiều niềm vui. 🌸",
+    "Mong mỗi ngày trôi qua, các bạn lại càng tự tin và rạng rỡ hơn. 🌟",
+    "Nụ cười của các bạn luôn khiến không khí lớp mình sáng bừng lên. 🌌",
+    "Cảm ơn các bạn đã góp phần làm cho 12A5 luôn ấm áp và vui vẻ. 🧡",
+    "Tình bạn đẹp là khi chúng ta luôn đồng hành và giúp đỡ nhau. 🔥",
+    "Sự tử tế của các bạn là điều đáng quý hơn các bạn nghĩ đó. 💕",
+    "Tụi mình sẽ luôn nhớ những lần các bạn âm thầm quan tâm và giúp đỡ mọi người. 💫",
+    "Mong các bạn luôn giữ nụ cười rạng rỡ và tinh thần lạc quan. 🌹",
+    "Có các bạn đồng hành là một điều may mắn của tập thể 12A5. ❤️",
+    "Chúc các bạn luôn vui vẻ, chân thành và giữ mãi tình bạn đẹp này. 🎉",
+    "Chúc các bạn có một năm cuối cấp thật trọn vẹn và đạt được nguyện vọng 1! 💖",
 ];
 
 const TreeSparks = ({ count, color }: { count: number; color: string }) => {
