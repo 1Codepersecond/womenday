@@ -48,7 +48,7 @@ export const SplashScreen = ({ onStart }: SplashScreenProps) => {
             onClick={handleTap}
         >
             {/* Semantic Top-Level Heading for Screen Readers & SEO */}
-            <h1 className="sr-only">Lời chúc 20/10 từ các bạn nam lớp 12A5 gửi đến các bạn nữ</h1>
+            <h1 className="sr-only">Birthday Bloom — Magical Cinematic Birthday Celebration</h1>
 
             {/* Dreamy Ambient Bokeh Auras (Zero-filter GPU-optimized multi-stop radial gradients) */}
             <div className="absolute top-[10%] left-[10%] w-[34rem] h-[34rem] rounded-full bg-[radial-gradient(circle,rgba(255,75,130,0.22)_0%,rgba(255,75,130,0.09)_40%,transparent_70%)] pointer-events-none animate-subtle-float" />

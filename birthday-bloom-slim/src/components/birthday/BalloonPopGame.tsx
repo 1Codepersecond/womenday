@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useBirthdayStore } from "@/features/core/store/useBirthdayStore";
 import { useSoundManager } from "./SoundManager";
 import { useConfetti } from "./Confetti";
+import { useTranslation } from "@/i18n";
 import { Sparkles, RotateCcw, PartyPopper } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -16,24 +17,66 @@ interface BalloonItem {
     delay: number;
 }
 
-// 4 quả bóng = 4 từ chúc mừng 20/10
-const BALLOON_WORDS = ["Chúc", "mừng", "20/10", "các nàng! 💐"];
-
 export const BalloonPopGame = () => {
     const { config } = useBirthdayStore();
     const { playPop, playReveal, playBoom } = useSoundManager();
     const { fireConfetti } = useConfetti();
+    const { isHindi, isBengali, isFrench } = useTranslation();
     const isMobile = useIsMobile();
 
+    const relationship = config.relationship || "partner";
     const primaryColor = config.favoriteColor || "#FF2A6D";
 
-    const words = BALLOON_WORDS;
+    // 4 words for 4 balloons customized to relationship and language
+    const words = useMemo(() => {
+        if (isFrench) {
+            if (relationship === "partner") return ["Tu", "es", "mon", "tout ! 💖"];
+            if (relationship === "friend") return ["Tu", "es", "une", "légende ! 🚀"];
+            if (relationship === "brother" || relationship === "sibling") return ["Tu", "es", "le", "meilleur ! 🏆"];
+            if (relationship === "sister") return ["Tu", "es", "pure", "magie ! 🌸✨"];
+            if (relationship === "father") return ["Tu", "es", "notre", "héros ! 🌟💪"];
+            if (relationship === "mother") return ["Tu", "es", "notre", "cœur ! 💐💛"];
+            if (relationship === "mentor" || relationship === "colleague") return ["Tu", "es", "une", "inspiration ! 🎯✨"];
+            return ["Tu", "es", "notre", "trésor ! 🌟💝"];
+        }
+        if (isBengali) {
+            if (relationship === "partner") return ["তুমি", "আমার", "সবচেয়ে", "প্রিয় ! 💖"];
+            if (relationship === "friend") return ["তুই", "আমাদের", "আসল", "লেজেন্ড ! 🚀"];
+            if (relationship === "brother" || relationship === "sibling") return ["তুমি", "আমাদের", "সেরা", "ভাই ! 🏆"];
+            if (relationship === "sister") return ["তুমি", "আমাদের", "মিষ্টি", "বোন ! 🌸✨"];
+            if (relationship === "father") return ["আপনি", "আমাদের", "আসল", "হিরো ! 🌟💪"];
+            if (relationship === "mother") return ["আপনি", "আমাদের", "জীবনের", "আলো ! 💐💛"];
+            if (relationship === "mentor" || relationship === "colleague") return ["আপনি", "আমাদের", "প্রেরণার", "উৎস ! 🎯✨"];
+            return ["আপনি", "আমাদের", "শ্রেষ্ঠ", "উপহার ! 🌟💝"];
+        }
+        if (isHindi) {
+            if (relationship === "partner") return ["आप", "मेरी", "पूरी", "दुनिया ! 💖"];
+            if (relationship === "friend") return ["तुम", "सच में", "सुपर", "लीजेंड ! 🚀"];
+            if (relationship === "brother" || relationship === "sibling") return ["तुम", "हमारे", "नंबर 1", "भाई ! 🏆"];
+            if (relationship === "sister") return ["तुम", "हमारी", "प्यारी", "बहन ! 🌸✨"];
+            if (relationship === "father") return ["आप", "हमारे", "सच्चे", "हीरो ! 🌟💪"];
+            if (relationship === "mother") return ["आप", "हमारा", "सबसे प्यारा", "सुकून ! 💐💛"];
+            if (relationship === "mentor" || relationship === "colleague") return ["आप", "हमारी", "सच्ची", "प्रेरणा ! 🎯✨"];
+            return ["आप", "हमारा", "सबसे अनमोल", "तोहफा ! 🌟💝"];
+        }
+
+        // English Default
+        if (relationship === "partner") return ["You", "are", "so", "loved! 💖"];
+        if (relationship === "friend") return ["You", "are", "super", "awesome! 🚀"];
+        if (relationship === "brother" || relationship === "sibling") return ["You", "are", "the", "legend! 🏆"];
+        if (relationship === "sister") return ["You", "are", "pure", "magic! 🌸✨"];
+        if (relationship === "father") return ["You", "are", "our", "hero! 🌟💪"];
+        if (relationship === "mother") return ["You", "are", "our", "heart! 💐💛"];
+        if (relationship === "grandfather" || relationship === "grandmother") return ["You", "are", "our", "pride! 🏅🌟"];
+        if (relationship === "mentor" || relationship === "colleague") return ["You", "are", "an", "inspiration! 🎯✨"];
+        return ["You", "are", "our", "treasure! 🌟💝"];
+    }, [relationship, isHindi, isBengali, isFrench]);
 
     const initialBalloons: BalloonItem[] = useMemo(() => [
-        { id: 0, color: "#FF4D6D", lightColor: "#FFAAA6", word: words[0], isPopped: false, xOffset: -12, delay: 0 },
-        { id: 1, color: "#6C5CE7", lightColor: "#A29BFE", word: words[1], isPopped: false, xOffset: -4, delay: 0.3 },
-        { id: 2, color: "#00CEC9", lightColor: "#81ECEC", word: words[2], isPopped: false, xOffset: 4, delay: 0.6 },
-        { id: 3, color: "#FDCB6E", lightColor: "#FFEAA7", word: words[3], isPopped: false, xOffset: 12, delay: 0.9 },
+        { id: 0, color: "#FF4D6D", lightColor: "#FFAAA6", word: words[0] || "You", isPopped: false, xOffset: -12, delay: 0 },
+        { id: 1, color: "#6C5CE7", lightColor: "#A29BFE", word: words[1] || "are", isPopped: false, xOffset: -4, delay: 0.3 },
+        { id: 2, color: "#00CEC9", lightColor: "#81ECEC", word: words[2] || "so", isPopped: false, xOffset: 4, delay: 0.6 },
+        { id: 3, color: "#FDCB6E", lightColor: "#FFEAA7", word: words[3] || "special! 💖", isPopped: false, xOffset: 12, delay: 0.9 },
     ], [words]);
 
     const [balloons, setBalloons] = useState<BalloonItem[]>(initialBalloons);
@@ -88,7 +131,7 @@ export const BalloonPopGame = () => {
             {/* Top Hanging Fairy Lights String */}
             <div className="absolute top-0 left-0 right-0 overflow-hidden flex justify-center gap-4 sm:gap-6 pointer-events-none opacity-90 py-2">
                 {Array.from({ length: isMobile ? 14 : 22 }).map((_, i) => {
-                    const colors = ["#FF4D6D", "#FDCB6E", "#E84393", "#A29BFE", "#FF9FF3", "#FD79A8"];
+                    const colors = ["#FF4D6D", "#FDCB6E", "#00CEC9", "#6C5CE7", "#00B894", "#E84393"];
                     const color = colors[i % colors.length];
                     return (
                         <motion.div
@@ -120,12 +163,24 @@ export const BalloonPopGame = () => {
                 >
                     <PartyPopper size={20} className="text-primary animate-bounce" />
                     <span>
-                        Nổ bóng bay nào! 🎈
+                        {isFrench
+                            ? "Éclatez les ballons ! 🎈"
+                            : isBengali
+                                ? "বেলুনগুলো ফাটান! 🎈"
+                                : isHindi
+                                    ? "गुब्बारे फोड़िए! 🎈"
+                                    : "Pop the balloons! 🎈"}
                     </span>
                 </motion.div>
 
                 <p className="font-display italic text-lg sm:text-2xl text-foreground/80">
-                    Chạm vào từng quả bóng để mở lời chúc bí mật 💌
+                    {isFrench
+                        ? "Touchez chaque ballon pour révéler le message secret 💌"
+                        : isBengali
+                            ? "গোপন বার্তাটি দেখতে প্রতিটি বেলুনে স্পর্শ করুন 💌"
+                            : isHindi
+                                ? "गुप्त संदेश देखने के लिए हर गुब्बारे को फोड़ें 💌"
+                                : "Tap each balloon to reveal the secret message 💌"}
                 </p>
             </div>
 
@@ -165,7 +220,7 @@ export const BalloonPopGame = () => {
                                         }}
                                         role="button"
                                         tabIndex={0}
-                                        aria-label={`Nổ bóng bay số ${balloon.id + 1}`}
+                                        aria-label={`Pop balloon ${balloon.id + 1}`}
                                         className="cursor-pointer flex flex-col items-center group touch-manipulation focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full"
                                     >
                                         {/* Balloon Bulb */}
@@ -222,7 +277,13 @@ export const BalloonPopGame = () => {
                     >
                         <RotateCcw size={16} />
                         <span>
-                            Chơi lại 🎈
+                            {isFrench
+                                ? "Rejouer 🎈"
+                                : isBengali
+                                    ? "আবার খেলুন 🎈"
+                                    : isHindi
+                                        ? "फिर से खेलें 🎈"
+                                        : "Play Again 🎈"}
                         </span>
                     </button>
                 </motion.div>

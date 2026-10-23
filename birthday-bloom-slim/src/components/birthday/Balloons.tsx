@@ -15,13 +15,18 @@ export const Balloons = ({ count = 20 }: {
 }) => {
     const [balloons, setBalloons] = useState<Balloon[]>([]);
     const { config } = useBirthdayStore();
-    const { reducedMotion } = config;
+    const { relationship, reducedMotion } = config;
     const isMobile = useIsMobile();
     const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const shouldReduce = Boolean(reducedMotion || prefersReducedMotion);
     const activeCount = shouldReduce ? Math.min(count, 4) : isMobile ? Math.min(count, 8) : count;
-    // Tông hồng - tím - vàng dành tặng các bạn nữ nhân ngày 20/10
-    const colors = useMemo(() => ["hsl(340, 85%, 65%)", "hsl(320, 75%, 60%)", "hsl(350, 90%, 75%)", "hsl(45, 100%, 70%)", "hsl(270, 70%, 75%)"], []);
+    const colors = useMemo(() => {
+        if (relationship === 'partner')
+            return ["hsl(340, 85%, 60%)", "hsl(320, 70%, 50%)", "hsl(0, 80%, 55%)", "hsl(45, 100%, 70%)"];
+        if (relationship === 'friend')
+            return ["hsl(200, 90%, 60%)", "hsl(160, 80%, 50%)", "hsl(270, 70%, 65%)", "hsl(330, 90%, 60%)"];
+        return ["hsl(30, 90%, 65%)", "hsl(45, 100%, 60%)", "hsl(20, 80%, 70%)", "hsl(200, 70%, 75%)"];
+    }, [relationship]);
     useEffect(() => {
         setBalloons(Array.from({ length: activeCount }, (_, i) => ({
             id: i,

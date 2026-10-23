@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useBirthdayStore, type RelationshipType } from '@/features/core/store/useBirthdayStore';
+import { useTranslation, type SupportedLanguage } from '@/i18n';
 import { toast } from 'sonner';
 import { 
   Share2, 
@@ -23,9 +24,13 @@ interface ShareCelebrationModalProps {
 
 export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ isOpen, onClose }) => {
   const { config } = useBirthdayStore();
+  const { language, isBengali, isHindi, isFrench } = useTranslation();
   
   const [customName, setCustomName] = useState(config.name || '');
   const [customRel, setCustomRel] = useState<RelationshipType>(config.relationship || 'partner');
+  const [customLang, setCustomLang] = useState<SupportedLanguage>(
+    (language as SupportedLanguage) || 'en'
+  );
   const [customSender, setCustomSender] = useState(config.senderName || '');
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<'share' | 'customize'>('share');
@@ -44,17 +49,17 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
   // Build the share URL with query parameters
   const baseUrl = typeof window !== 'undefined' 
     ? `${window.location.origin}${window.location.pathname}`
-    : 'https://12a5-chuc-mung-20-10.vercel.app/';
+    : 'https://birthday-bloom.vercel.app/';
 
-  const generateShareUrl = (name: string, rel: string, sender: string) => {
+  const generateShareUrl = (name: string, rel: string, lang: string, sender: string) => {
     const params = new URLSearchParams();
     if (name.trim()) params.set('name', name.trim());
     if (rel) params.set('rel', rel);
-    params.set('lang', 'vi');
+    if (lang && lang !== 'en') params.set('lang', lang);
     if (sender.trim()) params.set('sender', sender.trim());
     params.set('utm_source', 'share');
     params.set('utm_medium', 'social');
-    params.set('utm_campaign', 'women_day_20_10');
+    params.set('utm_campaign', 'birthday_celebration');
     
     const queryString = params.toString();
     return queryString ? `${baseUrl}?${queryString}` : baseUrl;
@@ -63,25 +68,46 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
   const activeShareUrl = generateShareUrl(
     activeTab === 'customize' ? customName : (config.name || ''),
     activeTab === 'customize' ? customRel : (config.relationship || 'partner'),
+    activeTab === 'customize' ? customLang : (language || 'en'),
     activeTab === 'customize' ? customSender : (config.senderName || '')
   );
 
   const targetName = activeTab === 'customize' ? customName : (config.name || '');
   
   const shareText = targetName
-    ? `💐 Các chàng trai 12A5 gửi tặng ${targetName} một bất ngờ nhỏ nhân ngày Phụ nữ Việt Nam 20/10! 🎂🎉`
-    : `💐 Các chàng trai lớp 12A5 gửi tặng các bạn nữ một bất ngờ nhỏ nhân ngày 20/10! 🎂🎉`;
+    ? (isFrench 
+        ? `✨ Venez célébrer l'anniversaire magique de ${targetName} sur Birthday Bloom ! 🎂🎉`
+        : isBengali
+          ? `✨ ${targetName}-এর জাদুকরী জন্মদিনের উদযাপনে যোগ দিন Birthday Bloom-এ! 🎂🎉`
+          : isHindi
+            ? `✨ ${targetName} के जादुई जन्मदिन के जश्न में शामिल हों Birthday Bloom पर! 🎂🎉`
+            : `✨ Join me in celebrating ${targetName}'s magical birthday surprise on Birthday Bloom! 🎂🎉`)
+    : (isFrench
+        ? `✨ Découvrez cette expérience magique de célébration d'anniversaire sur Birthday Bloom ! 🎂🎉`
+        : isBengali
+          ? `✨ Birthday Bloom-এ একটি অসাধারণ জাদুকরী জন্মদিনের ওয়েবসাইটের অভিজ্ঞতা নিন! 🎂🎉`
+          : isHindi
+            ? `✨ Birthday Bloom पर एक जादुई जन्मदिन का उत्सव देखें! 🎂🎉`
+            : `✨ Check out this magical cinematic birthday celebration experience on Birthday Bloom! 🎂🎉`);
 
   const handleCopyLink = async () => {
     try {
       if (typeof navigator !== 'undefined' && navigator.clipboard) {
         await navigator.clipboard.writeText(activeShareUrl);
         setCopied(true);
-        toast.success("Đã sao chép liên kết! ✨");
+        toast.success(
+          isFrench 
+            ? "Lien copié dans le presse-papier ! ✨" 
+            : isBengali 
+              ? "লিংক কপি করা হয়েছে! ✨" 
+              : isHindi 
+                ? "लिंक कॉपी हो गया! ✨" 
+                : "Celebration link copied! ✨"
+        );
         setTimeout(() => setCopied(false), 2500);
       }
     } catch {
-      toast.error("Không sao chép được liên kết");
+      toast.error("Failed to copy link");
     }
   };
 
@@ -89,7 +115,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
-          title: `12A5 chúc mừng 20/10${targetName ? ` — ${targetName}` : ''}`,
+          title: `Birthday Bloom — ${targetName || 'Magical Celebration'}`,
           text: shareText,
           url: activeShareUrl,
         });
@@ -113,7 +139,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
   };
 
   const shareToTwitter = () => {
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(activeShareUrl)}&hashtags=20thang10,PhuNuVietNam,12A5`;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(activeShareUrl)}&hashtags=BirthdayBloom,HappyBirthday`;
     openShareWindow(url);
   };
 
@@ -162,7 +188,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
           <button
             type="button"
             onClick={onClose}
-            aria-label="Đóng cửa sổ"
+            aria-label="Close modal"
             className="absolute top-5 right-5 rounded-full p-2 text-white/50 hover:text-white hover:bg-white/10 transition-colors"
           >
             <X size={20} />
@@ -174,10 +200,16 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
               <Share2 className="text-primary" size={28} />
             </div>
             <h3 id="share-modal-title" className="font-display text-2xl sm:text-3xl font-black text-white">
-              Chia sẻ lời chúc ✨
+              {isFrench ? "Partager la Célébration ✨" : isBengali ? "উদযাপন শেয়ার করুন ✨" : isHindi ? "जश्न शेयर करें ✨" : "Share Celebration ✨"}
             </h3>
             <p className="text-white/60 text-xs sm:text-sm mt-1">
-              Gửi bất ngờ này cho các bạn nữ hoặc tạo liên kết riêng tặng một người đặc biệt
+              {isFrench 
+                ? "Envoyez cette surprise magique ou créez-en une nouvelle pour vos proches"
+                : isBengali
+                  ? "এই জাদুকরী সারপ্রাইজটি পাঠান বা প্রিয়জনের জন্য নতুন তৈরি করুন"
+                  : isHindi
+                    ? "यह जादुई सरप्राइज भेजें या अपने अपनों के लिए नया बनाएं"
+                    : "Send this magical surprise or create a personalized link for someone special"}
             </p>
           </div>
 
@@ -193,7 +225,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
               }`}
             >
               <Send size={14} />
-              Chia sẻ nhanh
+              {isFrench ? "Partager Maintenant" : isBengali ? "এখনই শেয়ার করুন" : isHindi ? "अभी शेयर करें" : "Quick Share"}
             </button>
             <button
               type="button"
@@ -205,7 +237,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
               }`}
             >
               <Sparkles size={14} />
-              Tạo riêng
+              {isFrench ? "Créer pour Quelqu'un" : isBengali ? "নতুন তৈরি করুন" : isHindi ? "नया बनाएं" : "Customize Surprise"}
             </button>
           </div>
 
@@ -214,49 +246,68 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <div className="space-y-4 mb-6 text-left">
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-white/70 mb-1.5">
-                  Tên người nhận
+                  {isFrench ? "Nom du Destinataire" : isBengali ? "যার জন্মদিন (নাম)" : isHindi ? "जिसका जन्मदिन है (नाम)" : "Recipient Name"}
                 </label>
                 <input
                   type="text"
                   value={customName}
                   onChange={(e) => setCustomName(e.target.value)}
-                  placeholder="VD: Linh, Trang, Hương"
+                  placeholder="e.g. Sophia, Rahul, Ananya"
                   className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-white/30 text-sm focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-white/70 mb-1.5">
-                  Mối quan hệ
-                </label>
-                <select
-                  value={customRel}
-                  onChange={(e) => setCustomRel(e.target.value as RelationshipType)}
-                  className="w-full px-3 py-2.5 rounded-xl bg-[#1a0515] border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-primary transition-colors"
-                >
-                  <option value="partner">Người thương 💖</option>
-                  <option value="friend">Bạn thân 🎉</option>
-                  <option value="brother">Anh / Em trai 🤜🤛</option>
-                  <option value="sister">Chị / Em gái 🌸</option>
-                  <option value="mother">Mẹ 💐</option>
-                  <option value="father">Bố 👑</option>
-                  <option value="daughter">Con gái 🌟</option>
-                  <option value="son">Con trai 🚀</option>
-                  <option value="family">Gia đình 🏡</option>
-                  <option value="mentor">Thầy / Cô 🏆</option>
-                  <option value="colleague">Bạn cùng lớp 💼</option>
-                </select>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-white/70 mb-1.5">
+                    {isFrench ? "Relation" : isBengali ? "সম্পর্ক" : isHindi ? "रिश्ता" : "Relationship"}
+                  </label>
+                  <select
+                    value={customRel}
+                    onChange={(e) => setCustomRel(e.target.value as RelationshipType)}
+                    className="w-full px-3 py-2.5 rounded-xl bg-[#1a0515] border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-primary transition-colors"
+                  >
+                    <option value="partner">Partner / Love 💖</option>
+                    <option value="friend">Best Friend / Bestie 🎉</option>
+                    <option value="brother">Brother 🤜🤛</option>
+                    <option value="sister">Sister 🌸</option>
+                    <option value="mother">Mother 💐</option>
+                    <option value="father">Father 👑</option>
+                    <option value="daughter">Daughter 🌟</option>
+                    <option value="son">Son 🚀</option>
+                    <option value="family">Family Warmth 🏡</option>
+                    <option value="mentor">Mentor / Guide 🏆</option>
+                    <option value="colleague">Colleague 💼</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-white/70 mb-1.5">
+                    {isFrench ? "Langue" : isBengali ? "ভাষা" : isHindi ? "भाषा" : "Language"}
+                  </label>
+                  <select
+                    value={customLang}
+                    onChange={(e) => setCustomLang(e.target.value as SupportedLanguage)}
+                    className="w-full px-3 py-2.5 rounded-xl bg-[#1a0515] border border-white/15 text-white text-xs sm:text-sm focus:outline-none focus:border-primary transition-colors"
+                  >
+                    <option value="en">English (Global)</option>
+                    <option value="bn">বাংলা (Bengali)</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="fr">Français (French)</option>
+                    <option value="vi">Tiếng Việt (Vietnamese)</option>
+                  </select>
+                </div>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-white/70 mb-1.5">
-                  Tên của bạn (không bắt buộc)
+                  {isFrench ? "Votre Nom (Expéditeur)" : isBengali ? "আপনার নাম (শুভেচ্ছক)" : isHindi ? "आपका नाम (शुभचिंतक)" : "Your Name (Optional)"}
                 </label>
                 <input
                   type="text"
                   value={customSender}
                   onChange={(e) => setCustomSender(e.target.value)}
-                  placeholder="VD: Minh, Hùng"
+                  placeholder="e.g. Alex"
                   className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-white/30 text-sm focus:outline-none focus:border-primary transition-colors"
                 />
               </div>
@@ -268,7 +319,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <button
               type="button"
               onClick={shareToWhatsApp}
-              aria-label="Chia sẻ qua WhatsApp"
+              aria-label="Share via WhatsApp"
               className="flex flex-col items-center justify-center p-3 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 transition-all hover:scale-105"
             >
               <span className="text-2xl mb-1">💬</span>
@@ -278,7 +329,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <button
               type="button"
               onClick={shareToTwitter}
-              aria-label="Chia sẻ qua X / Twitter"
+              aria-label="Share via X / Twitter"
               className="flex flex-col items-center justify-center p-3 rounded-2xl bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/20 text-sky-400 transition-all hover:scale-105"
             >
               <Twitter size={22} className="mb-1" />
@@ -288,7 +339,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <button
               type="button"
               onClick={shareToTelegram}
-              aria-label="Chia sẻ qua Telegram"
+              aria-label="Share via Telegram"
               className="flex flex-col items-center justify-center p-3 rounded-2xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 transition-all hover:scale-105"
             >
               <Send size={22} className="mb-1" />
@@ -298,7 +349,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <button
               type="button"
               onClick={shareToFacebook}
-              aria-label="Chia sẻ qua Facebook"
+              aria-label="Share via Facebook"
               className="flex flex-col items-center justify-center p-3 rounded-2xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-400 transition-all hover:scale-105"
             >
               <Facebook size={22} className="mb-1" />
@@ -308,7 +359,7 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <button
               type="button"
               onClick={shareToLinkedIn}
-              aria-label="Chia sẻ qua LinkedIn"
+              aria-label="Share via LinkedIn"
               className="flex flex-col items-center justify-center p-3 rounded-2xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 text-cyan-400 transition-all hover:scale-105"
             >
               <Linkedin size={22} className="mb-1" />
@@ -321,18 +372,18 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
             <input
               type="text"
               readOnly
-              aria-label="Đường dẫn chia sẻ"
+              aria-label="Celebration Share URL"
               value={activeShareUrl}
               className="flex-1 bg-transparent px-3 text-xs text-white/80 select-all outline-none truncate font-mono"
             />
             <button
               type="button"
               onClick={handleCopyLink}
-              aria-label="Sao chép liên kết chia sẻ"
+              aria-label="Copy share link"
               className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-xs font-bold text-black transition-all hover:brightness-110 active:scale-95"
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}
-              {copied ? "Đã chép!" : "Sao chép"}
+              {copied ? "Copied!" : "Copy"}
             </button>
           </div>
 
@@ -344,14 +395,14 @@ export const ShareCelebrationModal: React.FC<ShareCelebrationModalProps> = ({ is
               className="w-full py-3 rounded-2xl border border-white/20 bg-white/10 hover:bg-white/15 text-white text-xs sm:text-sm font-semibold transition-all flex items-center justify-center gap-2"
             >
               <Share2 size={16} />
-              Chia sẻ qua ứng dụng khác
+              {isFrench ? "Partager via les Applications" : isBengali ? "অন্যান্য অ্যাপে শেয়ার করুন" : isHindi ? "अन्य ऐप्स में शेयर करें" : "More Sharing Options"}
             </button>
           )}
 
           {/* Footer Branding */}
           <div className="mt-6 text-center text-[10px] text-white/40 tracking-wider uppercase flex items-center justify-center gap-1.5">
             <Heart size={10} className="text-primary fill-primary" />
-            <span>Lớp 12A5 • Gửi trọn yêu thương</span>
+            <span>Birthday Bloom • Crafted with Love</span>
             <Globe size={10} className="text-white/40" />
           </div>
         </motion.div>

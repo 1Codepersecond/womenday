@@ -65,7 +65,7 @@ describe("Accessibility & Keyboard Navigation Suite", () => {
     describe("BalloonPopGame", () => {
         it("renders balloons as accessible buttons with proper ARIA attributes", () => {
             render(<BalloonPopGame />);
-            const balloonButtons = screen.getAllByRole("button", { name: /Nổ bóng bay/i });
+            const balloonButtons = screen.getAllByRole("button", { name: /Pop balloon/i });
             expect(balloonButtons.length).toBe(4);
 
             balloonButtons.forEach((btn) => {
@@ -76,21 +76,21 @@ describe("Accessibility & Keyboard Navigation Suite", () => {
 
         it("pops balloon when Enter key is pressed", () => {
             render(<BalloonPopGame />);
-            const initialBalloons = screen.getAllByRole("button", { name: /Nổ bóng bay/i });
+            const initialBalloons = screen.getAllByRole("button", { name: /Pop balloon/i });
             expect(initialBalloons.length).toBe(4);
 
             fireEvent.keyDown(initialBalloons[0], { key: "Enter" });
 
-            const remainingBalloons = screen.getAllByRole("button", { name: /Nổ bóng bay/i });
+            const remainingBalloons = screen.getAllByRole("button", { name: /Pop balloon/i });
             expect(remainingBalloons.length).toBe(3);
         });
 
         it("pops balloon when Space key is pressed", () => {
             render(<BalloonPopGame />);
-            const balloons = screen.getAllByRole("button", { name: /Nổ bóng bay/i });
+            const balloons = screen.getAllByRole("button", { name: /Pop balloon/i });
             fireEvent.keyDown(balloons[0], { key: " " });
 
-            const remaining = screen.getAllByRole("button", { name: /Nổ bóng bay/i });
+            const remaining = screen.getAllByRole("button", { name: /Pop balloon/i });
             expect(remaining.length).toBe(3);
         });
     });
