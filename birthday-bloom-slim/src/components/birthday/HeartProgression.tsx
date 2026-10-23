@@ -65,7 +65,7 @@ const FourCornerMerge = ({ onDone }: {
     const { name } = useBirthdayStore(state => state.config);
     const { isHindi, isBengali, isFrench, isVietnamese } = useTranslation();
     const loveMessage = isVietnamese
-        ? `Thương các bạn nhiều ${name || 'lắm'}`
+        ? `Cảm ơn các bạn nhiều ${name || 'lắm'}`
         : isFrench
         ? `On t'aime tellement ${name || 'trésor'}`
         : isBengali

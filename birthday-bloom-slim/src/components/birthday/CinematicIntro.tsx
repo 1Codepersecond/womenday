@@ -378,7 +378,7 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                 ];
             if (relationship === 'friend')
                 return [
-                    `Gửi *${name || 'các bạn nữ'}* thân yêu 💐`,
+                    `Gửi *${name || 'các bạn nữ'}* 💐`,
                     "Chúc các bạn luôn *xinh đẹp, vui vẻ và thật nhiều niềm tin*!",
                     "Cảm ơn các bạn đã *đồng hành cùng lớp mình* suốt thời gian qua 🌸",
                     "Chúc mừng ngày Phụ nữ Việt Nam 20/10! ✨"
@@ -541,7 +541,7 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
         if (scene === "envelope-letter") {
             addTimer(() => {
                 setScene("special-message");
-            }, 30000 * speedMultiplier);
+            }, 40000 * speedMultiplier);
         }
 
         if (scene === "special-message") {
@@ -590,11 +590,11 @@ export const CinematicIntro = ({ onComplete }: CinematicIntroProps) => {
                     addTimer(() => {
                         setFinalLineIndex(i);
                         actionsRef.current.playType();
-                    }, (10000 + i * 3600) * speedMultiplier);
+                    }, (10000 + i * 5500) * speedMultiplier);
                 }
             });
 
-            const endTime = (10000 + finalLines.length * 3600) * speedMultiplier;
+            const endTime = (10000 + finalLines.length * 5500) * speedMultiplier;
             addTimer(() => {
                 actionsRef.current.playBoom();
                 actionsRef.current.fireConfetti({ particleCount: 300, spread: 180 });
